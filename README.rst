@@ -15,7 +15,7 @@ Basic Tutorial
 
 .. math::
 
-   \frac{ \sum_{t=0}^{N}f(t,k) }{N}
+   \\frac{ \\sum_{t=0}^{N}f(t,k) }{N}
    
 
-   :raw-math:`$$ \frac{s}{\sqrt{N}} $$`
+   :raw-math:`$$ \\frac{s}{\\sqrt{N}} $$`
