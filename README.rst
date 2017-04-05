@@ -22,3 +22,8 @@ Basic Tutorial
 
 	     
 The area of a circle is :math:`A_\text{c} = (\pi/4) d^2`.
+
+.. math::
+   
+   (a + b)^2  &=  (a + b)(a + b) \\
+   &=  a^2 + 2ab + b^2
