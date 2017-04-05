@@ -1,1 +1,12 @@
-# obliquity_inference
+OBLIQUITY INFERENCE
+==================================================
+
+Overview
+--------
+
+Installation
+--------
+
+
+Basic Tutorial
+--------
