@@ -35,7 +35,7 @@ where P and dP, and R and dR, are the period measurement and the stellar radius 
 
 To compute the inclination PDF, you have two options:
 
-- Using the full PDF of *V:sub:`eq`*
+- Using the full PDF of *V*:sub:`eq`
 
 Following the statistical techniques of Morton & Winn (2014), we can compute the PDF of
 *cosI* - for a **given** star - by creating an empirical PDF for Veq
