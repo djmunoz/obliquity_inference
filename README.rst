@@ -25,7 +25,19 @@ If, for a given star, you have *VsinI* and *P*:sub:`rot` measurements (with erro
 First, you need to obtain obtain a PDF for the stars equatorial velocity
 
 
+To compute the inclination PDF, you have two options:
 
+- Using the full PDF of *Veq*
+
+Following the statistical techniques of Morton & Winn (2014), we can compute the PDF of
+*cosI* - for a **given** star - by doing
+
+.. code:: python
+
+   cosi_arr = np.linspace(0.0,0.99999999,300)
+   post = np.asarray([posterior_cosi_full(c,Vsini0,dVsini0,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
+
+  
 - Using the analytic approximation
 
 .. code:: python
