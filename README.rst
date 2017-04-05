@@ -79,3 +79,6 @@ For a collection of stars, you can either save all the inclination posteriors PD
 
 .. code:: python
 
+
+Basic Tutorial: Using lambda
+--------
