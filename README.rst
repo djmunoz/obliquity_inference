@@ -35,7 +35,7 @@ where P and dP, and R and dR, are the period measurement and the stellar radius 
 
 To compute the inclination PDF, you have two options:
 
-- Using the full PDF of *Veq*
+- Using the full PDF of *V:sub:`eq`*
 
 Following the statistical techniques of Morton & Winn (2014), we can compute the PDF of
 *cosI* - for a **given** star - by creating an empirical PDF for Veq
@@ -55,7 +55,7 @@ Following the statistical techniques of Morton & Winn (2014), we can compute the
 - Using the analytic approximation
 
 Alternatively, if *both* vsini_dist and veq_dist can be well approximated by normal distributions,
-you can use the analytic approximation of Mu\~noz & Perets (2017)
+you can use the analytic approximation of Munoz & Perets (2017)
   
 .. code:: python
 
@@ -68,7 +68,9 @@ you can use the analytic approximation of Mu\~noz & Perets (2017)
 For this, we use dataframe objects in the pandas Python package.
 
 .. code:: python
+	  
    import pandas as pd
 
+You can either save all the inclantion posteriors PDFs, or simply save *Veq*
 
 3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
