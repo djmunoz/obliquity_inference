@@ -13,7 +13,7 @@ Basic Tutorial
 
 In order to carry out the Bayesian parameter estimation of the concentration parameter "kappa" (Fabrycky & Winn, 2009), you need to do it in three steps.
 
-1. **How to compute** *sin I* **from data**
+1. **How to compute** *sin I* **from data observations of** *VsinI* **and**  *P*:sub:`rot`
 
 First, you import the package
    
@@ -75,7 +75,7 @@ For a collection of stars, you can either save all the inclination posteriors PD
 
 3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
 
-   The main goal is to compute a posterior PDF for the concentration parameter :math:`\alpha` 
+   The main goal is to compute a posterior PDF for the concentration parameter kappa. Thi
 
 .. code:: python
 
