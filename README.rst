@@ -8,7 +8,7 @@ Installation
 --------
 
 
-Basic Tutorial: Using *V sin I*
+Basic Tutorial #1: Using *V sin I*
 --------
 
 In order to carry out the Bayesian parameter estimation of the concentration parameter "kappa" (Fabrycky & Winn, 2009), you need to do it in three steps.
@@ -80,5 +80,5 @@ For a collection of stars, you can either save all the inclination posteriors PD
 .. code:: python
 
 
-Basic Tutorial: Using lambda
+Basic Tutorial #2: Using lambda
 --------
