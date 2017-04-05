@@ -1,14 +1,15 @@
 OBLIQUITY INFERENCE
 ==================================================
-
-#. Overview
+.. sectnum::
+   
+Overview
 --------
 
-#. Installation
+Installation
 --------
 
 
-#. Basic Tutorial #1: Using *V sin I*
+Basic Tutorial #1: Using *V sin I*
 --------
 
 In order to carry out the Bayesian parameter estimation of the concentration parameter "kappa" (Fabrycky & Winn, 2009), you need to do it in three steps.
@@ -73,7 +74,7 @@ For this, we use dataframe objects in the pandas Python package.
 
 For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
 
-III. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
+3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
 
    The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical Bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (or more conveniently, PDFs for *cosI*; Morton & Winn, 2014).
 
@@ -82,5 +83,5 @@ a. Hello
 .. code:: python
 
 
-#. Basic Tutorial #2: Using lambda
+Basic Tutorial #2: Using lambda
 --------
