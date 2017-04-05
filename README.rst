@@ -60,4 +60,4 @@ For this, we use dataframe objects in the pandas Python package.
    import pandas as pd
 
 
-3. **Combining MULTIPLE ** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
+3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
