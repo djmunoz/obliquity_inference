@@ -11,6 +11,8 @@ Installation
 Basic Tutorial
 --------
 
+In order to carry out the Bayesian parameter estimation of the concentration parameter "kappa" (Fabrycky & Winn, 2009), you need to do it in three steps.
+
 1. **How to compute** *sin I* **from data**
 
 First, you import the package
@@ -27,25 +29,34 @@ by running
 
 .. code:: python
 
-   veq_vals = sample_veq_vals(P,dP,R,dR)
+   veq_vals = sample_veq_vals(P,dP,R,dR,N=20000)
 
-where P and dP, and R and dR, are respectively the period measurement with its uncertainty, and the stellar radius with its uncertainty. If there is only one value of uncertainty for a given emasurement, it assumed that said measurement is distributed normally with mean and dispersion given by the measurement and its error. If there is an 'upper' and 'lower' uncertainty interval (as it is often the case for the radius of Kepler stars)
+where P and dP, and R and dR, are the period measurement and the stellar radius measurements with their respective uncertainties. If there is only one value of uncertainty for a given emasurement, it assumed that said measurement is distributed normally with mean and dispersion given by the measurement and its error. If there is an 'upper' and 'lower' uncertainty interval (as it is often the case for the radius of Kepler stars)
 
 To compute the inclination PDF, you have two options:
 
 - Using the full PDF of *Veq*
 
 Following the statistical techniques of Morton & Winn (2014), we can compute the PDF of
-*cosI* - for a **given** star - by doing
+*cosI* - for a **given** star - by creating an empirical PDF for Veq
 
 .. code:: python
 
+   from scipy.stats import gaussian_kde
+   def veq_dist(x):
+	  return gaussian_kde(veq_vals,bw_method=0.1).evaluate(x)
+   
+.. code:: python
+   
    cosi_arr = np.linspace(0.0,0.99999999,300)
-   post = np.asarray([posterior_cosi_full(c,Vsini0,dVsini0,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
+   post = np.asarray([posterior_cosi_full(c,vsini_dist,veq_dist)  for c in cosi_arr])
 
   
 - Using the analytic approximation
 
+Alternatively, if *both* vsini_dist and veq_dist can be well approximated by normal distributions,
+you can use the analytic approximation of Mu\~noz & Perets (2017)
+  
 .. code:: python
 
    cosi_arr = np.linspace(0.0,0.99999999,300)
