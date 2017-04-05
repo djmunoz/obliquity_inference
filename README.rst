@@ -11,5 +11,5 @@ Installation
 Basic Tutorial
 --------
 
-1. **How to compute *sin I* from data**
+1. **How to compute** *sin I* **from data**
 
