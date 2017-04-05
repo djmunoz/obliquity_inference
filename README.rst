@@ -25,14 +25,18 @@ If, for a given star, you have *VsinI* and *P*:sub:`rot` measurements (with erro
 First, you need to obtain obtain a PDF for the stars equatorial velocity
 
 
+
+- Using the analytic approximation
+
 .. code:: python
 
-   cosi_arr = np.linspace(0.0,0.99999999,200)
+   cosi_arr = np.linspace(0.0,0.99999999,300)
    post = np.asarray([posterior_cosi_analytic(c,Vsini0,dVsini0,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
 
 
 2. **Computing a set of** *cosI* **PDFs** from a CSV file/dataset
 
 For this, we use dataframe objects in the pandas Python package.
+
 .. code:: python
    import pandas as pd
