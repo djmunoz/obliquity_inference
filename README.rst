@@ -2,14 +2,14 @@ OBLIQUITY INFERENCE
 ==================================================
 .. sectnum::
    
-Overview
+1. Overview
 --------
 
-Installation
+2. Installation
 --------
 
 
-Basic Tutorial #1: Using *V sin I*
+3. Basic Tutorial #1: Using *V sin I*
 --------
 
 In order to carry out the Bayesian parameter estimation of the concentration parameter "kappa" (Fabrycky & Winn, 2009), you need to do it in three steps.
@@ -83,5 +83,5 @@ a. Hello
 .. code:: python
 
 
-Basic Tutorial #2: Using lambda
+4. Basic Tutorial #2: Using lambda
 --------
