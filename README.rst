@@ -38,7 +38,7 @@ To compute the inclination PDF, you have two options:
 - Using the full PDF of *V*:sub:`eq`
 
 Following the statistical techniques of Morton & Winn (2014), we can compute the PDF of
-*cosI* - for a **given** star - by creating an empirical PDF for Veq
+*cosI* - for a **given** star - by creating an empirical PDF for *V*:sub:`eq`
 
 .. code:: python
 
@@ -71,6 +71,10 @@ For this, we use dataframe objects in the pandas Python package.
 	  
    import pandas as pd
 
-You can either save all the inclantion posteriors PDFs, or simply save *Veq*
+For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
 
 3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
+
+
+.. code:: python
+
