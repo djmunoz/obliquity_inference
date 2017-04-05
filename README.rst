@@ -73,9 +73,9 @@ For this, we use dataframe objects in the pandas Python package.
 
 For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
 
-3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
+III. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
 
-   The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (more conveniently, PDFs for *cosI*).
+   The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical Bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (or more conveniently, PDFs for *cosI*; Morton & Winn, 2014).
 
 a. Hello
 
