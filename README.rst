@@ -75,6 +75,8 @@ For a collection of stars, you can either save all the inclination posteriors PD
 
 3. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
 
+.. include:: <isogrk1.txt>
+	     
    The main goal is to compute a posterior PDF for the concentration parameter :math:`\alpha` 
 
 .. code:: python
