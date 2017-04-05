@@ -8,12 +8,12 @@ Installation
 --------
 
 
-Basic Tutorial
+Basic Tutorial: Using *V sin I*
 --------
 
 In order to carry out the Bayesian parameter estimation of the concentration parameter "kappa" (Fabrycky & Winn, 2009), you need to do it in three steps.
 
-1. **How to compute** *sin I* **from data observations of** *VsinI* **and**  *P*:sub:`rot`
+1. **How to compute** *sin I* **from observations of** *VsinI* **and**  *P*:sub:`rot`
 
 First, you import the package
    
