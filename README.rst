@@ -64,8 +64,10 @@ Following the statistical techniques of Morton & Winn (2014), we can compute the
    cosi_arr = np.linspace(0.0,0.99999999,300)
    post = np.asarray([posterior_cosi_full(c,vsini_dist,veq_dist)  for c in cosi_arr])
 
-  
-- Using the analytic approximation
+
+OR...
+
+- Using an analytic approximation
 
 Alternatively, if *both* vsini_dist and veq_dist can be well approximated by normal distributions,
 you can use the analytic approximation of Munoz & Perets (2017)
