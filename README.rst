@@ -87,6 +87,13 @@ For this, we use dataframe objects in the pandas Python package.
 	  
    import pandas as pd
 
+You need a CSV file containing the following columns: 'Vsini','dVsini','Veq','dVeq_plus','dVeq_minus'
+
+.. code:: python
+	  
+   columns = ['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus']
+
+
 For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
