@@ -112,7 +112,7 @@ For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclna
 
 .. class:: no-web
            
-   .. image:: example_figures/inclination_posteriors_m+w.pdf
+   .. image:: example_figures/inclination_posteriors_m+w.png
       :height: 100px
       :width: 200 px
       :scale: 100 %
