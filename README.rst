@@ -96,6 +96,7 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
 	  
    columns = ['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus']
 
+   
 (where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above). If your
  CSV file has slightly different columns names, specify them in the columns kewyord below.
    
