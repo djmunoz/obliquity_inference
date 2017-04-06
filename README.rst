@@ -111,18 +111,31 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
 .. code:: python
 
    # create 100 stars oriented randomly
-   cosi = np.random.random(100)
-   lambda = np.random.random(100) * 2 * np.pi
-   periods = np.random.rayleigh(3, 100)
-   radii = np.random.normal(1.0,0.2,100)
+   Nstars = 100
+   cosi = np.random.random(Nstars)
+   lamb = np.random.random(Nstars) * 2 * np.pi
+   periods = np.random.rayleigh(3, Nstars)
+   radii = np.random.normal(1.0,0.2, Nstars)
 
    # compute observables
-   veq =
+   veq = 
    vsini = 
 
    # add uncertainties
+   dveq = np.random.normal(0.5,0.1,100)
+   dvsini = np.random.normal(0.5,0.1,100)
+   for i in range(Nstars):
+	  veq[i]+= np.random.normal(0.0,dveq[i],1)
+	  vsin[i]+= np.random.normal(0.0,dvsini[i],1)
+	  
+   # Create a dataframe
+   df_synth = pd.DataFrame(np.array([vsini,dvsini,veq,dveq,dveq]).T,\
+	                   columns=['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus'],index=np.arange(Nstars)+1)
 
+   # Compute the posterior inclination from the observed data
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_synth)
 
+   
 Thus, you can plot these posteriors
 
 For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclnation PDFs looks like:
