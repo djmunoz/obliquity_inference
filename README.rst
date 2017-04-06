@@ -87,7 +87,7 @@ For this, we use dataframe objects in the pandas Python package.
 	  
    import pandas as pd
 
-You need a CSV file containing the following columns: 'Vsini','dVsini','Veq','dVeq_plus','dVeq_minus'
+You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 'dVeq_plus' and 'dVeq_minus'
 
 .. code:: python
 	  
