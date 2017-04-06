@@ -97,6 +97,12 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
    
 For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
 
+.. code:: python
+	  
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df[columns])
+
+
+
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~
 
@@ -134,3 +140,5 @@ and then you can plot the kappa posteriors
 
 Basic Tutorial #2: Using lambda
 --------
+
+Coming soon...
