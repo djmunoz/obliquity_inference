@@ -97,13 +97,25 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
    columns = ['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus']
 
    
-(where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above). If your CSV file has slightly different columns names, specify them in the columns keyword below.
+(where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above). If your CSV file has slightly different columns names, specify them in the columns keyword below
    
 .. code:: python
 	  
-   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df, columns=columns)
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df, columns=columns, analytic_approx=True)
 
-where :code:`cosivals` is
+where :code:`cosivals` is a numpy array of cosine values between 0 and 1, and :code:`cosipdf`  is a *list* of numpy arrays, one array per object,
+and each one of the same length as :code:`cosivals`.
+
+Thus, you can plot these posteriors
+
+For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclnation PDFs looks like:
+
+.. class:: no-web
+           
+   .. image:: example_figures/inclination_posteriors_m+w.pdf
+      :height: 100px
+      :width: 200 px
+      :scale: 100 %
 
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
