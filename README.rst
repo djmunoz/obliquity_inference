@@ -103,7 +103,7 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
 	  
    cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df, columns=columns)
 
-where :cosivals is
+where ::cosivals is
 
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
