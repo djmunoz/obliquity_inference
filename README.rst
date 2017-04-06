@@ -114,12 +114,12 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
    Nstars = 100
    cosi = np.random.random(Nstars)
    lamb = np.random.random(Nstars) * 2 * np.pi
-   periods = np.random.rayleigh(3, Nstars)
-   radii = np.random.normal(1.0,0.2, Nstars)
+   periods = np.random.rayleigh(3, Nstars) * 86400 # in seconds
+   radii = np.random.normal(1.0,0.2, Nstars) * 6.957e5 # in kms
 
    # compute observables
-   veq = 
-   vsini = 
+   veq = 2 * np.pi * radii / periods 
+   vsini = veq * np.sqrt(1 - cosi * cosi)
 
    # add uncertainties
    dveq = np.random.normal(0.5,0.1,100)
