@@ -69,7 +69,7 @@ OR...
 
 - Using an analytic approximation
 
-Alternatively, if *both* vsini_dist and veq_dist can be well approximated by normal distributions,
+Alternatively, if *both* :code:`vsini_dist` and :code:`veq_dist` can be well approximated by normal distributions,
 you can use the analytic approximation of Munoz & Perets (2017)
   
 .. code:: python
@@ -97,7 +97,7 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
    columns = ['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus']
 
    
-(where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above). If your CSV file has slightly different columns names, specify them in the columns kewyord below.
+(where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above). If your CSV file has slightly different columns names, specify them in the columns keyword below.
    
 .. code:: python
 	  
