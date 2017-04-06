@@ -8,6 +8,16 @@ Overview
 Installation
 --------
 
+As usual, the installation is very simple
+
+.. code::
+   
+   git clone https://github.com/djmunoz/obliquity_inference.git
+
+   cd obliquity_inference
+   
+   sudo python setup.py install
+
 
 Basic Tutorial #1: Using *V sin I*
 --------
