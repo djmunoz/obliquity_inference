@@ -17,8 +17,6 @@ In order to carry out the Bayesian parameter estimation of the concentration par
 How to compute *sin I* from observations of *VsinI* and  *P*:sub:`rot`
 ~~~~~~~~
 
- **How to compute** **from observations of** *VsinI* **and**  *P*:sub:`rot`
-
 
 First, you import the package
    
@@ -68,7 +66,8 @@ you can use the analytic approximation of Munoz & Perets (2017)
    post = np.asarray([posterior_cosi_analytic(c,Vsini0,dVsini0,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
 
 
-B. **Computing a set of** *cosI* **PDFs from a CSV file/dataset**
+Computing a set of *cosI* PDFs from a CSV file/dataset
+~~~~~~~~~
 
 For this, we use dataframe objects in the pandas Python package.
 
@@ -78,8 +77,8 @@ For this, we use dataframe objects in the pandas Python package.
 
 For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
 
-C. **Combining MULTIPLE** *cosI* **PDFs to perform hierarchical Bayesian inference on the "concentration" parameter**
-
+Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
+~~~~~~~~
    The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical Bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (or more conveniently, PDFs for *cosI*; Morton & Winn, 2014).
 
 a. Hello
