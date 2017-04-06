@@ -130,7 +130,8 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
 	  
    # Create a dataframe
    df_synth = pd.DataFrame(np.array([vsini,dvsini,veq,dveq,dveq]).T,\
-	                   columns=['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus'],index=np.arange(Nstars)+1)
+	                   columns=['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus'],\
+			   index=np.arange(Nstars)+1)
 
    # Compute the posterior inclination from the observed data
    cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_synth)
@@ -138,6 +139,17 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
    
 Thus, you can plot these posteriors
 
+.. code:: python
+
+   import matplotlib.pyplot as plt
+
+   for pdf in cosipdf:
+	  plt.plot(cosi_vals,pdf)
+   plt.show()
+   
+
+
+   
 For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclnation PDFs looks like:
 
 .. class:: no-web
