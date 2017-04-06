@@ -81,7 +81,10 @@ you can use the analytic approximation of Munoz & Perets (2017)
 Computing a set of *cosI* PDFs from a CSV file/dataset
 ~~~~~~~~~
 
-For this, we use dataframe objects in the pandas Python package.
+For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals)
+and recompute the inclination PDF using the analytic approximation.
+
+You need to read-in a table/database of stars. For this, we use dataframe objects in the pandas Python package.
 
 .. code:: python
 	  
@@ -93,14 +96,14 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
 	  
    columns = ['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus']
 
-(where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above).
+(where the equatorial velocity values are obtained from the measurements of stellar radius and rotation period -- see above). If your
+ CSV file has slightly different columns names, specify them in the columns kewyord below.
    
-For a collection of stars, you can either save all the inclination posteriors PDFs, or simply save *V*:sub:`eq` (with 68% confidence intervals) and recompute the inclination PDF using the analytic approximation.
-
 .. code:: python
 	  
-   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df[columns])
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df, columns=columns)
 
+ where :cosivals is
 
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
