@@ -80,13 +80,34 @@ For a collection of stars, you can either save all the inclination posteriors PD
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~
 
-   The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical Bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (or more conveniently, PDFs for *cosI*; Morton & Winn, 2014).
+The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical Bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (or more conveniently, PDFs for *cosI*; Morton & Winn, 2014).
 
 Hello
 '''''
 
+Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
+another one for multi-transit systems, and a third one that is a combination of the previous two. 
+
 .. code:: python
 
+   cosi_vals_singles, cosipdf_singles = obl.read_cosipdf('post_singles.txt')
+   cosi_vals_multis, cosipdf_multis = obl.read_cosipdf('post_multis.txt')
+   cosi_vals_all, cosipdf_all = obl.read_cosipdf('post_all.txt')
+	  
+From these cosI PDFs, you can compute the kappa posterior
+	  
+.. code:: python
+	  
+   kappa_vals=np.linspace(0.01,25,100)
+   
+   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles)
+   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis)
+   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_all,cosi_vals_all)
+
+and then you can plot the kappa posteriors
+	  
+.. code:: python
+	  
    import matplotlib.pyplot as plt
 
    
