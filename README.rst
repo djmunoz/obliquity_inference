@@ -106,6 +106,23 @@ You need a CSV file containing the following columns: 'Vsini', 'dVsini', 'Veq', 
 where :code:`cosivals` is a numpy array of cosine values between 0 and 1, and :code:`cosipdf`  is a *list* of numpy arrays, one array per object,
 and each one of the same length as :code:`cosivals`.
 
+Let us create a synthetic random (uniform) sample of stellar orientations and save it into a pandas dataframe:
+
+.. code:: python
+
+   # create 100 stars oriented randomly
+   cosi = np.random.random(100)
+   lambda = np.random.random(100) * 2 * np.pi
+   periods = np.random.rayleigh(3, 100)
+   radii = np.random.normal(1.0,0.2,100)
+
+   # compute observables
+   veq =
+   vsini = 
+
+   # add uncertainties
+
+
 Thus, you can plot these posteriors
 
 For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclnation PDFs looks like:
