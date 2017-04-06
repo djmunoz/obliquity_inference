@@ -115,7 +115,7 @@ For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclna
    .. image:: example_figures/inclination_posteriors_m+w.png
       :height: 100px
       :width: 200 px
-      :scale: 100 %
+      :scale: 80 %
 
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
