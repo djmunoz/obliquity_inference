@@ -167,6 +167,10 @@ For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclna
       :width: 200 px
       :scale: 80 %
 
+Even by eye, the distribution of PDFs is noticeably different respect to the uniform orientation example.
+Morton & Winn (2014) found that, except for 12 KOIs (out of 70), the orientation of the stellar spin is consistent
+with alignment with the planetary orbit.
+
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~
