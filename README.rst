@@ -15,6 +15,8 @@ As usual, the installation is very simple
    git clone https://github.com/djmunoz/obliquity_inference.git
 
    cd obliquity_inference
+
+   sudo python setup.py build
    
    sudo python setup.py install
 
@@ -33,7 +35,7 @@ First, you import the package
 .. code:: python
 	  
    import obliquity_inference as obl
-   import numpy as np
+
    
 If, for a given star, you have *VsinI* and *P*:sub:`rot` measurements (with errors), you can get a probability distribution function (PDF) for the inclination *cosI*.
 
@@ -110,6 +112,9 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
 
 .. code:: python
 
+   import numpy as np
+   import obliquity_inference as obl
+   
    # create 100 stars oriented randomly
    Nstars = 100
    cosi = np.random.random(Nstars)
