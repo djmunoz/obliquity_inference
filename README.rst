@@ -146,7 +146,7 @@ Thus, you can plot these posteriors
    for pdf in cosipdf: plt.plot(cosi_vals,pdf,color='k')
 
    plt.xlabel(r'$\cos I_{*,k}$',size=20)
-   plt.label(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
+   plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
    plt.show()
    
 
