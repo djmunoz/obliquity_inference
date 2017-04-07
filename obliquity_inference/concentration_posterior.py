@@ -1,4 +1,6 @@
 from cosi_pdf import cosi_pdf 
+import numpy as np
+from hierarchical_inference import compute_hierachical_likelihood
 
 """
 Compute the concentration parameter kappa (Fabrycky & Winn, 2009) of spin-orbit
