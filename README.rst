@@ -111,7 +111,6 @@ and each one of the same length as :code:`cosivals`.
 Let us create a synthetic random (uniform) sample of stellar orientations and save it into a pandas dataframe:
 
 .. code:: python
-	  
    import numpy as np
    import obliquity_inference as obl
 
