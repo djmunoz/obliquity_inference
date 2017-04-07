@@ -150,6 +150,12 @@ Thus, you can plot these posteriors
    plt.show()
    
 
+.. class:: no-web
+           
+   .. image:: example_figures/posteriors_test.png
+      :height: 100px
+      :width: 200 px
+      :scale: 80 %
 
    
 For the Morton & Winn (2014) sample of 70 Kepler stars, the collection of inclnation PDFs looks like:
