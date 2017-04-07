@@ -182,7 +182,22 @@ Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the
 
 The main goal is to compute a posterior PDF for the concentration parameter kappa. To implement the hierarchical Bayesian inference formalism of Hogg et al (2009) one needs a collection of PDFs for the line-of-sight inclination angle *I* (or more conveniently, PDFs for *cosI*; Morton & Winn, 2014).
 
-Hello
+Uniform distribution
+'''''
+
+Let us use the some uniform distribution of stellar spin orientations from section
+3.2 above. We can use all these objects (and their respective inclination PDFs) to
+derive a PDF for the values of kappa that are consistent with such sample of inclinations.
+
+.. code:: python
+	  
+   kappa_vals=np.linspace(0.01,25,100)
+
+   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals)
+   
+
+   
+Real-data
 '''''
 
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
