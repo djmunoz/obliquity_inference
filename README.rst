@@ -126,7 +126,7 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
    dvsini = np.random.normal(0.5,0.1,100)
    for i in range(Nstars):
 	  veq[i]+= np.random.normal(0.0,dveq[i],1)
-	  vsin[i]+= np.random.normal(0.0,dvsini[i],1)
+	  vsini[i]+= np.random.normal(0.0,dvsini[i],1)
 	  
    # Create a dataframe
    df_synth = pd.DataFrame(np.array([vsini,dvsini,veq,dveq,dveq]).T,\
