@@ -143,8 +143,10 @@ Thus, you can plot these posteriors
 
    import matplotlib.pyplot as plt
 
-   for pdf in cosipdf:
-	  plt.plot(cosi_vals,pdf)
+   for pdf in cosipdf: plt.plot(cosi_vals,pdf,color='k')
+
+   plt.xlabel(r'$\cos I_{*,k}$',size=20)
+   plt.label(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
    plt.show()
    
 
