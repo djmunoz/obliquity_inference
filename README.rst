@@ -192,11 +192,29 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
 .. code:: python
 	  
    kappa_vals=np.linspace(0.01,25,100)
-
-   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals) # this may take a few minutes
+   # this may take a few minutes
+   # (although it contains embarrassingly parallelizable loops)
+   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals) 
    
+If you plot the resulting concentration posterior, 
 
-   
+.. code:: python
+
+   plt.plot(kappa_vals,kappa_post)
+   plt.show()
+
+which should give you
+
+.. class:: no-web
+           
+   .. image:: example_figures/kappa_posterior_uniform.png
+      :height: 100px
+      :width: 200 px
+      :scale: 80 %
+
+which is a nice Gaussian with a maximum at zero, meaning that the data is consistent
+with kappa=0, i.e., uniform spin orientations. The greater the number of targets (in this example we are using :code:`Nstars=100`), the narrower the distribution around zero is (you can check this by setting :code:`Nstars=10` and finding that the kappa distribution is still around zero, but wider).
+
 Real-data
 '''''
 
