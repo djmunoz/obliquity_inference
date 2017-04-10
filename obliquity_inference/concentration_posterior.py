@@ -1,5 +1,7 @@
 from cosi_pdf import cosi_pdf 
 import numpy as np
+from numpy import cosh, sqrt, sinh, pi
+from scipy.integrate import quad
 from hierarchical_inference import compute_hierachical_likelihood
 
 """
@@ -8,6 +10,17 @@ alignment from a dataset of multiple targets
 
 """
 
+def cosi_integrand(y, k, z):
+    """
+    Integrand to Eq. (11) of Morton & Winn (2014)
+    """
+    return cosh(k*sqrt(1-y*y)) / sqrt(1-y*y) / sqrt(1-(z/y)*(z/y))
+
+def cosi_pdf2(z,kappa=1):
+    """
+    Equation (11) of Morton & Winn (2014)
+    """
+    return 2*kappa/(pi * sinh(kappa)) * quad(cosi_integrand,z,1,args=(kappa,z,))[0] 
 
 
 def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals):
