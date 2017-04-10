@@ -251,6 +251,8 @@ and then you can plot the kappa posteriors
 
 The area of a circle is :raw-latex:`$\pi r^2$`
 
+The area of a circle is :math:`A_\text{c} = (\pi/4) d^2`.
+
 ```tex
 \sum_{x=0}^n f(x)
 ```
