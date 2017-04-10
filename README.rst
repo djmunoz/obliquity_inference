@@ -127,8 +127,8 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
    vsini = veq * np.sqrt(1 - cosi * cosi)
 
    # add uncertainties
-   dveq = np.random.normal(0.5,0.1,100)
-   dvsini = np.random.normal(0.5,0.1,100)
+   dveq = np.random.normal(0.5,0.1,Nstars)
+   dvsini = np.random.normal(0.5,0.1,Nstars)
    for i in range(Nstars):
 	  veq[i]+= np.random.normal(0.0,dveq[i],1)
 	  vsini[i]+= np.random.normal(0.0,dvsini[i],1)
@@ -193,7 +193,7 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
 	  
    kappa_vals=np.linspace(0.01,25,100)
 
-   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals)
+   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals) # this may take a few minutes
    
 
    
