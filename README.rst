@@ -246,7 +246,8 @@ and then you can plot the kappa posteriors
 	  
    import matplotlib.pyplot as plt
 
-   
+:raw-math:`$$ \frac{s}{\sqrt{N}} $$`
+	  
 
 Basic Tutorial #2: Using lambda
 --------
