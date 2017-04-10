@@ -1,7 +1,7 @@
 OBLIQUITY INFERENCE
 ==================================================
-.. role:: raw-math(raw)
-    :format: latex html
+.. role:: raw-latex(raw)
+    :format: latex
 	     
 .. sectnum::
    
@@ -247,7 +247,8 @@ and then you can plot the kappa posteriors
    import matplotlib.pyplot as plt
 
 :raw-math:`$$ \frac{s}{\sqrt{N}} $$`
-	  
+
+The area of a circle is :raw-latex:`$\pi r^2$`
 
 Basic Tutorial #2: Using lambda
 --------
