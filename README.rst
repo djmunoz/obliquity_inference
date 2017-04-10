@@ -1,9 +1,5 @@
 OBLIQUITY INFERENCE
 ==================================================
-.. role:: raw-math(raw)
-    :format: latex html
-
-	     
 .. sectnum::
    
 Overview
