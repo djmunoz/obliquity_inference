@@ -1,12 +1,17 @@
 import numpy as np
 import scipy.special as spec
 from scipy.integrate import quad
+from scipy.stats.distributions import norm
 
 """
 Bayesian inference routines for the line-of-star inclination of a single star
 or of a collection of stars on an object-by-object basis
 
 """
+
+ALPHA = 0.23
+Rsun_in_km = 6.957e5
+day_in_seconds = 86400.0
 
 
 def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
@@ -43,7 +48,7 @@ def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
            while (len(r_vals_low[r_vals_low < 0]) > 0):
                r_vals_low[r_vals_low < 0] =  norm(Rval,Rerr[1]).rvs(len(r_vals_low[r_vals_low < 0]))
            r_vals_low =  r_vals_low[r_vals_low < Rval]
-           r_vals = rd.choice(np.append(r_vals_upp,r_vals_low),N)
+           r_vals = np.random.choice(np.append(r_vals_upp,r_vals_low),N)
     except TypeError:
         r_vals = norm(Rval,Rerr).rvs(N)
         while (len(r_vals[r_vals < 0]) > 0):
@@ -56,6 +61,9 @@ def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
     v_vals = 2 * np.pi * r_vals / peq_vals * Rsun_in_km/ day_in_seconds
 
     return v_vals
+
+
+
 
 
 def posterior_cosi_full(cosi,vsini_dist,veq_dist):
