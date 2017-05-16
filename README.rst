@@ -44,7 +44,7 @@ by running
 
 .. code:: python
 
-   veq_vals = sample_veq_vals(P,dP,R,dR,N=20000)
+   veq_vals = obl.sample_veq_vals(P,dP,R,dR,N=20000)
 
 where P and dP, and R and dR, are the period measurement and the stellar radius measurements with their respective uncertainties. If there is only one value of uncertainty for a given emasurement, it assumed that said measurement is distributed normally with mean and dispersion given by the measurement and its error. If there is an 'upper' and 'lower' uncertainty interval (as it is often the case for the radius of Kepler stars)
 
