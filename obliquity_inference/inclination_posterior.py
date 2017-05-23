@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import scipy.special as spec
 from scipy.integrate import quad
 from scipy.stats.distributions import norm
