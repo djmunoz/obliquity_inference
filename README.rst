@@ -230,7 +230,19 @@ First load the :code:`vsini`,  :code:`Prot` and :code:`R` data
 .. code:: python
 
    df = pd.read_csv('data/morton2014.csv')
+   list(df.columns)
+   
+.. code::
 
+   
+   
+Now compute the equatorial velocities
+
+
+.. code:: python
+
+   compute_equatorial_velocity_dataframe(df,columns = ['R','dR_plus','dR_minus','PRot','dPRot'])
+   # you can check that new columns have been added
 
   
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
