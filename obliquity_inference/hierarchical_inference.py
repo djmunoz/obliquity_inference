@@ -1,8 +1,11 @@
 import numpy as np
-from scipy.integrate import cumtrapz
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 import time, sys
+from inclination_distribution import sample_distribution
+
+
+
 """
 General routines to perform hierarchical bayesian inference based on the method
 of Hogg, Myets and Bovy (2010)
@@ -10,7 +13,6 @@ of Hogg, Myets and Bovy (2010)
 
 """
 
-np.random.seed(42)
 
 def update_progress(completed,total):
     """
@@ -40,22 +42,8 @@ def update_progress(completed,total):
     sys.stdout.flush()
 
 
-def sample_distribution(dist_grid,val_grid,nsamples=1):
-    """ 
-    Nsamples from a tabulated posterior 
-    """
-    
-    cdf = cumtrapz(dist_grid,val_grid)
-    cdf /= cdf.max()
-    u = np.random.random(size=nsamples)
-    inds = np.digitize(u,cdf)
-    vals= val_grid[inds]
-
-    return vals
-
-
 def compute_hierachical_likelihood(parameter_vals, y_pdf_given_parameter,
-                                   y_vals, y_measurement_pdfs,y_measurement_priors, K = 1000):
+                                   y_vals, y_measurement_pdfs,y_measurement_priors = None, K = 1000):
     """
     Parameter estimation:
     
@@ -89,20 +77,24 @@ def compute_hierachical_likelihood(parameter_vals, y_pdf_given_parameter,
 
     lnlike = np.zeros(M)
 
+
     
     for i in range(N_measurements):
         update_progress(i,N_measurements)
         y_post = y_measurement_pdfs[i]
         sampled_measurements = sample_distribution(y_post,y_vals,nsamples= K)
-        pi0_yk = interp1d(y_vals,y_measurement_priors)(sampled_measurements)
-        #pi0_yk = np.repeat(1,K)
-        
+        if (y_measurement_priors is not None):
+            pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
+        else:
+            pi0_yk = np.ones(K)
+            
         for k in range(M):
-            f_yk = np.vectorize(y_pdf_given_parameter)(sampled_measurements,parameter_vals[k])
-            lnlike[k] += np.log((f_yk[:]/pi0_yk[:]).mean())
+            f_yk = y_pdf_given_parameter(np.sort(sampled_measurements),parameter_vals[k])
+            lnlike[k] = lnlike[k] + np.log((f_yk[:]/pi0_yk[:]).mean())
         #y, p = np.meshgrid(sampled_measurements,parameter_vals)
         #y, p = y.flatten(), p.flatten()
-        #f_yk = np.vectorize(y_pdf_given_parameter)(y,p).reshape(M,K)
+        #f_yk = y_pdf_given_parameter(y,p).reshape(M,K)
+        ##f_yk = np.vectorize(y_pdf_given_parameter)(y,p).reshape(M,K)
         #lnlike[:] += np.log((f_yk/pi0_yk[None,:]).mean(axis=1)).flatten()
 
 

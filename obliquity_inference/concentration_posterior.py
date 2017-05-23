@@ -1,8 +1,10 @@
 from cosi_pdf import cosi_pdf 
 import numpy as np
 from numpy import cosh, sqrt, sinh, pi
-from scipy.integrate import quad
+from scipy.integrate import quad, cumtrapz
+from scipy.interpolate import interp2d, RectBivariateSpline
 from hierarchical_inference import compute_hierachical_likelihood
+
 
 """
 Compute the concentration parameter kappa (Fabrycky & Winn, 2009) of spin-orbit
@@ -23,7 +25,7 @@ def cosi_pdf2(z,kappa=1):
     return 2*kappa/(pi * sinh(kappa)) * quad(cosi_integrand,z,1,args=(kappa,z,))[0] 
 
 
-def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals):
+def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals, cosi_pdf_function = cosi_pdf):
 
     """
     Use a collection of PDFs (N different stars) for cosI - the cosine of the
@@ -41,14 +43,13 @@ def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals):
     cosi_prior_list = []
     for k in range(len(cosi_post_list)):
         cosi_prior_list.append(np.ones(cosi_post_list[k].shape[0])) # for now, just a flat prior
-    
-    
-    concentration_likelihood = compute_hierachical_likelihood(kappa_vals,cosi_pdf,cosi_vals,
-                                                              cosi_post_list,cosi_prior_list)
+    cosi_prior_list = None
+    concentration_likelihood = compute_hierachical_likelihood(kappa_vals,cosi_pdf_function,cosi_vals,
+                                                              cosi_post_list,y_measurement_priors=cosi_prior_list)
 
     concentration_posterior = concentration_likelihood[:] * concentration_prior[:]
     
-    return concentration_posterior
+    return concentration_posterior/cumtrapz(concentration_posterior,x=kappa_vals,initial=0)[-1]
 
 
 
