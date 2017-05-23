@@ -232,11 +232,7 @@ First load the :code:`vsini`,  :code:`Prot` and :code:`R` data and check the col
    df_mw = pd.read_csv('data/morton2014.csv')
    list(df_mw.columns)
 
-and you should get
-   
-.. code::
-
-   ['name', 'R', 'dR_plus', 'dR_minus', 'Prot', 'dProt', 'Vsini', 'dVsini', 'Nplanets']
+and you should get :code:`['name', 'R', 'dR_plus', 'dR_minus', 'Prot', 'dProt', 'Vsini', 'dVsini', 'Nplanets']`
    
 Now compute the equatorial velocities
 
@@ -247,11 +243,7 @@ Now compute the equatorial velocities
    # you can check that new columns have been added
    list(df_mw.columns)
 
-.. code::
-
-   ['name', 'R', 'dR_plus', 'dR_minus', 'Prot', 'dProt', 'Vsini', 'dVsini', 'Nplanets', 'Veq', 'dVeq_plus', 'dVeq_minus']
-
-And now your dataframe has columns corresponding to equatorial velocity.
+which will give you  :code:`['name', 'R', 'dR_plus', 'dR_minus', 'Prot', 'dProt', 'Vsini', 'dVsini', 'Nplanets', 'Veq', 'dVeq_plus', 'dVeq_minus']`. And now your dataframe has columns corresponding to equatorial velocity.
 
 Next, you compute the inclination posteriors as in Section 3.3.1 above. We can use the
 :code:`Nplanets` column to separate the data into "multis" and "singles"
@@ -266,7 +258,10 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
    for pdf in cosipdf_singles: plt.plot(cosi_vals_singles,pdf/pdf.sum(),color='b',lw=0.6)
    
    for pdf in cosipdf_multis: plt.plot(cosi_vals_multis,pdf/pdf.sum(),color='r',lw=0.6)
-   
+
+   plt.plot([np.nan],[np.nan],color='b',label='singles')
+   plt.plot([np.nan],[np.nan],color='r',label='multis')
+   plt.legend(loc='upper left')
    plt.xlabel(r'$\cos I_{*,k}$',size=20)
    plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
    plt.show()
@@ -274,8 +269,21 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
 another one for multi-transit systems, and a third one that is a combination of the previous two. 
 
+
+Hierarchical inference
+::::::::
+
+
 .. code:: python
 
+   kappa_vals=np.linspace(0.01,100,150)
+	  
+   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals)
+   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles)
+   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis)
+
+   
+   
    cosi_vals_singles, cosipdf_singles = obl.read_cosipdf('post_singles.txt')
    cosi_vals_multis, cosipdf_multis = obl.read_cosipdf('post_multis.txt')
    cosi_vals_all, cosipdf_all = obl.read_cosipdf('post_all.txt')
