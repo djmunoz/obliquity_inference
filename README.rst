@@ -225,7 +225,7 @@ Morton & Winn (2014)
 The Morton & Winn (2014) data sample can be found in the :code:`data/` directory
 of this repository.
 
-First load the :code:`vsini`,  :code:`Prot` and :code:`R` data
+First load the :code:`vsini`,  :code:`Prot` and :code:`R` data and check the column names
 
 .. code:: python
 
@@ -234,14 +234,14 @@ First load the :code:`vsini`,  :code:`Prot` and :code:`R` data
    
 .. code::
 
-   
+   ['name', 'R', 'dR_plus', 'dR_minus', 'Prot', 'dProt', 'Vsini', 'dVsini', 'Nplanets']
    
 Now compute the equatorial velocities
 
 
 .. code:: python
 
-   compute_equatorial_velocity_dataframe(df,columns = ['R','dR_plus','dR_minus','PRot','dPRot'])
+   obl.compute_equatorial_velocity_dataframe(df,columns = ['R','dR_plus','dR_minus','Prot','dProt'])
    # you can check that new columns have been added
 
   
