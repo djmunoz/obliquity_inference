@@ -265,9 +265,11 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
    plt.xlabel(r'$\cos I_{*,k}$',size=20)
    plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
    plt.show()
-   
-Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
-another one for multi-transit systems, and a third one that is a combination of the previous two. 
+
+
+.. class:: no-web
+           
+   .. image:: example_figures/mw_inc_post.png
 
 
 Hierarchical inference
