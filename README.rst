@@ -57,6 +57,7 @@ Following the statistical techniques of Morton & Winn (2014), we can compute the
 
 .. code:: python
 
+   import numpy as np
    from scipy.stats import gaussian_kde
    def veq_dist(x):
 	  return gaussian_kde(veq_vals,bw_method=0.1).evaluate(x)
@@ -217,6 +218,9 @@ with kappa=0, i.e., uniform spin orientations. The greater the number of targets
 
 Real-data
 '''''
+
+Morton & Winn (2014)
+~~~~~~~~
 
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
 another one for multi-transit systems, and a third one that is a combination of the previous two. 
