@@ -264,6 +264,7 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
 
    # plot the inclination posteriors
    for pdf in cosipdf_singles: plt.plot(cosi_vals_singles,pdf,color='b',lw=0.6)
+   
    for pdf in cosipdf_multis: plt.plot(cosi_vals_multis,pdf,color='r',lw=0.6)
    
    plt.xlabel(r'$\cos I_{*,k}$',size=20)
