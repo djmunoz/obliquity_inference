@@ -220,7 +220,7 @@ Real-data
 '''''
 
 Morton & Winn (2014)
-~~~~~~~~
+::::::
 
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
 another one for multi-transit systems, and a third one that is a combination of the previous two. 
