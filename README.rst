@@ -222,6 +222,17 @@ Real-data
 Morton & Winn (2014)
 ::::::
 
+The Morton & Winn (2014) data sample can be found in the :code:`data/` directory
+of this repository.
+
+First load the :code:`vsini`,  :code:`Prot` and :code:`R` data
+
+.. code:: python
+
+   df = pd.read_csv('data/morton2014.csv')
+
+
+  
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
 another one for multi-transit systems, and a third one that is a combination of the previous two. 
 
