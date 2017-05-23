@@ -229,8 +229,10 @@ First load the :code:`vsini`,  :code:`Prot` and :code:`R` data and check the col
 
 .. code:: python
 
-   df = pd.read_csv('data/morton2014.csv')
-   list(df.columns)
+   df_mw = pd.read_csv('data/morton2014.csv')
+   list(df_mw.columns)
+
+and you should get
    
 .. code::
 
@@ -241,10 +243,33 @@ Now compute the equatorial velocities
 
 .. code:: python
 
-   obl.compute_equatorial_velocity_dataframe(df,columns = ['R','dR_plus','dR_minus','Prot','dProt'])
+   obl.compute_equatorial_velocity_dataframe(df_mw,columns = ['R','dR_plus','dR_minus','Prot','dProt'])
    # you can check that new columns have been added
+   list(df_mw.columns)
 
-  
+.. code::
+
+   ['name', 'R', 'dR_plus', 'dR_minus', 'Prot', 'dProt', 'Vsini', 'dVsini', 'Nplanets', 'Veq', 'dVeq_plus', 'dVeq_minus']
+
+And now your dataframe has columns corresponding to equatorial velocity.
+
+Next, you compute the inclination posteriors as in Section 3.3.1 above. We can use the
+:code:`Nplanets` column to separate the data into "multis" and "singles"
+   
+.. code:: python
+	  
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_mv,Npoints=400)
+   cosi_vals_singles, cosipdf_singles = obl.compute_cosipdf_from_dataframe(df_mv[df['Nplanets'] == 1],Npoints=400)
+   cosi_vals_multis, cosipdf_multis = obl.compute_cosipdf_from_dataframe(df_mv[df['Nplanets'] > 1],Npoints=400)
+
+   # plot the inclination posteriors
+   for pdf in cosipdf_singles: plt.plot(cosi_vals_singles,pdf,color='b',lw=0.6)
+   for pdf in cosipdf_multis: plt.plot(cosi_vals_multis,pdf,color='r',lw=0.6)
+   
+   plt.xlabel(r'$\cos I_{*,k}$',size=20)
+   plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
+   plt.show()
+   
 Let us assume you have 3 ASCII files containing 3 collections of *cosI* PDFs: one for single-planet systems,
 another one for multi-transit systems, and a third one that is a combination of the previous two. 
 
