@@ -204,7 +204,7 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
    # estimate the confidence intervals
    c = kappa_post.cumsum()/kappa_post.sum()
    kappa_mid = min(0,kappa_vals[kappa_post == kappa_post.max()][0])
-   kappa_upp = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0])
+   kappa_upp = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
    kappa_low = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
    
    
@@ -227,7 +227,7 @@ which should give you
       :width: 200 px
       :scale: 80 %
 
-which is a nice Gaussian with a maximum at zero, meaning that the data is consistent
+which is a nice Gaussian with a maximum near zero, meaning that the data is consistent
 with kappa=0, i.e., uniform spin orientations. The greater the number of targets (in this example we are using :code:`Nstars=100`), the narrower the distribution around zero is (you can check this by setting :code:`Nstars=10` and finding that the kappa distribution is still around zero, but wider).
 
 Real-data
