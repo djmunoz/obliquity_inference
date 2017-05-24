@@ -213,8 +213,8 @@ If you plot the resulting concentration posterior,
 .. code:: python
 
    plt.plot(kappa_vals,kappa_post)
-   plt.text(0.8,0.9,r'$\kappa=%.2f^{%.2f}_{%.2f}$' % (kappa_mid,kappa_upp-kappa_mid,kappa_mid-kappa_low))
-   plt.xlabel(r'$\kappa$')
+   plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$' % (kappa_mid,kappa_upp-kappa_mid,kappa_mid-kappa_low))
+   plt.xlabel(r'$\kappa$',size=18)
    plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
    plt.show()
 
