@@ -335,7 +335,11 @@ And we can plot the results
    plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
    plt.show()
    
-	  
+
+.. image:: example_figures/kappa_posterior_m+w.png
+
+
+   
 From these cosI PDFs, you can compute the kappa posterior
 	  
 .. code:: python
