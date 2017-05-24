@@ -193,12 +193,12 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
 
 .. code:: python
 	  
-   kappa_vals=np.linspace(0.01,10,100)
+   kappa_vals=np.linspace(0.001,6,100)
    pdf_func = obl.cosi_pdf_interp
    # alternatively, you could do
    # pdf_func = obl.cosi_pdf
    # but that is MUCH slower
-   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_func = pdf_func) 
+   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_function = pdf_func) 
 
    # estimate the confidence intervals
    c = kappa_post.cumsum()/kappa_post.sum()
