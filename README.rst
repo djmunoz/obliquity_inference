@@ -149,7 +149,7 @@ Thus, you can plot these posteriors
 
    import matplotlib.pyplot as plt
 
-   for pdf in cosipdf: plt.plot(cosi_vals,pdf,color='b',lw=0.6)
+   for pdf in cosipdf: plt.plot(cosi_vals,pdf/pdf.sum(),color='b',lw=0.6)
 
    plt.xlabel(r'$\cos I_{*,k}$',size=20)
    plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
@@ -193,7 +193,7 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
 
 .. code:: python
 	  
-   kappa_vals=np.linspace(0.01,,100)
+   kappa_vals=np.linspace(0.01,10,100)
    pdf_func = obl.cosi_pdf_interp
    # alternatively, you could do
    # pdf_func = obl.cosi_pdf
