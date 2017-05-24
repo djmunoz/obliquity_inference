@@ -338,33 +338,7 @@ And we can plot the results
 
 .. image:: example_figures/kappa_posterior_m+w.png
 
-
-   
-From these cosI PDFs, you can compute the kappa posterior
-	  
-.. code:: python
-	  
-   kappa_vals=np.linspace(0.01,25,100)
-   
-   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles)
-   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis)
-   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_all,cosi_vals_all)
-
-and then you can plot the kappa posteriors
-	  
-.. code:: python
-	  
-   import matplotlib.pyplot as plt
-
-:raw-math:`$ \frac{s}{\sqrt{N}} $`
-
-The area of a circle is :raw-latex:`$\pi r^2$`
-
-The area of a circle is :math:`A_\text{c} = (\pi/4) d^2`.
-
-```tex
-\sum_{x=0}^n f(x)
-```
+Which is consistent with Figure 6 of Morton & Winn (2014).
 
 Basic Tutorial #2: Using lambda
 --------
