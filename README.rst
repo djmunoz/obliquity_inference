@@ -153,6 +153,7 @@ Thus, you can plot these posteriors
 
    plt.xlabel(r'$\cos I_{*,k}$',size=20)
    plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
+   plt.ylim(0,0.08)
    plt.show()
    
 
