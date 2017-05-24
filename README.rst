@@ -265,8 +265,8 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
 .. code:: python
 	  
    cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_mw,Npoints=400)
-   cosi_vals_singles, cosipdf_singles = obl.compute_cosipdf_from_dataframe(df_mw[df['Nplanets'] == 1],Npoints=400)
-   cosi_vals_multis, cosipdf_multis = obl.compute_cosipdf_from_dataframe(df_mw[df['Nplanets'] > 1],Npoints=400)
+   cosi_vals_singles, cosipdf_singles = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] == 1],Npoints=400)
+   cosi_vals_multis, cosipdf_multis = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] > 1],Npoints=400)
 
    # plot the inclination posteriors
    for pdf in cosipdf_singles: plt.plot(cosi_vals_singles,pdf/pdf.sum(),color='b',lw=0.6)
