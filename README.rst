@@ -205,7 +205,7 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
    c = kappa_post.cumsum()/kappa_post.sum()
    kappa_mid = kappa_vals[kappa_post == kappa_post.max()][0]
    kappa_upp = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
-   kappa_low = min(kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
+   kappa_low = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
    
    
 If you plot the resulting concentration posterior, 
