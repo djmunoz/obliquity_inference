@@ -289,7 +289,11 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
 Hierarchical inference
 ::::::::
 
+As we did in Section 3.3.1, we can now use all these imclination posteriors to compute a concentration posterior for
+:code:`kappa` using the function :code:`compute_kappa_posterior_from_cosI`. Following Morton & Winn (2014), we can do
+this analysis for the whole dataset, or separating between single-candidate stars, and multi-candidate stars
 
+  
 .. code:: python
 
    kappa_vals=np.linspace(0.01,100,150)
@@ -313,6 +317,22 @@ Hierarchical inference
    kappa_upp_multis = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
    kappa_low_multis = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
 
+And we can plot the results
+   
+.. code:: python
+
+   plt.plot(kappa_vals,kappa_post_all,color='k',lw=2.0)
+   plt.plot(kappa_vals,kappa_post_singles,color='b')
+   plt.plot(kappa_vals,kappa_post_multis,color='b')
+   plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+	  % (kappa_mid_all,kappa_upp_all-kappa_mid_all,kappa_mid_all-kappa_low_all),size=20)
+   plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+	  % (kappa_mid_singles,kappa_upp_singles-kappa_mid_singles,kappa_mid_singles-kappa_low_singles),size=20)
+   plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+	  % (kappa_mid_multis,kappa_upp_multis-kappa_mid_multis,kappa_mid_multis-kappa_low_multis),size=20)
+   plt.xlabel(r'$\kappa$',size=18)
+   plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
+   plt.show()
    
 	  
 From these cosI PDFs, you can compute the kappa posterior
