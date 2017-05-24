@@ -305,17 +305,17 @@ this analysis for the whole dataset, or separating between single-candidate star
    c = kappa_post_all.cumsum()/kappa_post_all.sum()
    kappa_mid_all = kappa_vals[kappa_post_all == kappa_post_all.max()][0]
    kappa_upp_all = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
-   kappa_low_all = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
+   kappa_low_all = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
    c = kappa_post_singles.cumsum()/kappa_post_singles.sum()
    kappa_mid_singles = kappa_vals[kappa_post_singles == kappa_post_singles.max()][0]
    kappa_upp_singles = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
-   kappa_low_singles = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
+   kappa_low_singles = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
    c = kappa_post_multis.cumsum()/kappa_post_multis.sum()
    kappa_mid_multis = kappa_vals[kappa_post_multis == kappa_post_multis.max()][0]
    kappa_upp_multis = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
-   kappa_low_multis = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
+   kappa_low_multis = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
 And we can plot the results
    
@@ -324,12 +324,12 @@ And we can plot the results
    plt.plot(kappa_vals,kappa_post_all,color='k',lw=2.0,label='all')
    plt.plot(kappa_vals,kappa_post_singles,color='b',label='singles')
    plt.plot(kappa_vals,kappa_post_multis,color='r',label='multis')
-   plt.text(10,0.18,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+   plt.text(10,0.17,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_all,kappa_upp_all-kappa_mid_all,kappa_mid_all-kappa_low_all),size=20)
-   plt.text(5,0.23,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
-	  % (kappa_mid_singles,kappa_upp_singles-kappa_mid_singles,kappa_mid_singles-kappa_low_singles),size=20)
-   plt.text(20,0.03,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
-	  % (kappa_mid_multis,kappa_upp_multis-kappa_mid_multis,kappa_mid_multis-kappa_low_multis),size=20)
+   plt.text(5,0.22,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+	  % (kappa_mid_singles,kappa_upp_singles-kappa_mid_singles,kappa_mid_singles-kappa_low_singles),size=20,color='b')
+   plt.text(20,0.02,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+	  % (kappa_mid_multis,kappa_upp_multis-kappa_mid_multis,kappa_mid_multis-kappa_low_multis),size=20,color='r')
    plt.legend(loc='upper right')
    plt.xlabel(r'$\kappa$',size=18)
    plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
