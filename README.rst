@@ -303,17 +303,17 @@ this analysis for the whole dataset, or separating between single-candidate star
    kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis,cosi_pdf_function = pdf_func)
 
    c = kappa_post_all.cumsum()/kappa_post_all.sum()
-   kappa_mid_all = kappa_vals[kappa_post_all == kappa_post_all.max()][0]
+   kappa_mid_all = kappa_vals[np.abs(c - 0.50) == np.abs(c - 0.50).min()][0]
    kappa_upp_all = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
    kappa_low_all = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
    c = kappa_post_singles.cumsum()/kappa_post_singles.sum()
-   kappa_mid_singles = kappa_vals[kappa_post_singles == kappa_post_singles.max()][0]
+   kappa_mid_singles = kappa_vals[np.abs(c - 0.50) == np.abs(c - 0.50).min()][0]
    kappa_upp_singles = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
    kappa_low_singles = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
    c = kappa_post_multis.cumsum()/kappa_post_multis.sum()
-   kappa_mid_multis = kappa_vals[kappa_post_multis == kappa_post_multis.max()][0]
+   kappa_mid_multis = kappa_vals[np.abs(c - 0.50) == np.abs(c - 0.50).min()][
    kappa_upp_multis = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
    kappa_low_multis = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
@@ -326,7 +326,7 @@ And we can plot the results
    plt.plot(kappa_vals,kappa_post_multis,color='r',label='multis')
    plt.text(10,0.17,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_all,kappa_upp_all-kappa_mid_all,kappa_mid_all-kappa_low_all),size=20)
-   plt.text(5,0.22,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+   plt.text(4,0.23,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_singles,kappa_upp_singles-kappa_mid_singles,kappa_mid_singles-kappa_low_singles),size=20,color='b')
    plt.text(20,0.02,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_multis,kappa_upp_multis-kappa_mid_multis,kappa_mid_multis-kappa_low_multis),size=20,color='r')
