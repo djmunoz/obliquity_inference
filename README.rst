@@ -322,14 +322,15 @@ And we can plot the results
 .. code:: python
 
    plt.plot(kappa_vals,kappa_post_all,color='k',lw=2.0)
-   plt.plot(kappa_vals,kappa_post_singles,color='b')
-   plt.plot(kappa_vals,kappa_post_multis,color='b')
+   plt.plot(kappa_vals,kappa_post_singles,color='b',label='singles')
+   plt.plot(kappa_vals,kappa_post_multis,color='r',label='multis')
    plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_all,kappa_upp_all-kappa_mid_all,kappa_mid_all-kappa_low_all),size=20)
    plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_singles,kappa_upp_singles-kappa_mid_singles,kappa_mid_singles-kappa_low_singles),size=20)
    plt.text(0.8,0.9,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_multis,kappa_upp_multis-kappa_mid_multis,kappa_mid_multis-kappa_low_multis),size=20)
+   plt.legend(loc='upper right')
    plt.xlabel(r'$\kappa$',size=18)
    plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
    plt.show()
