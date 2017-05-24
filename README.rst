@@ -193,18 +193,28 @@ derive a PDF for the values of kappa that are consistent with such sample of inc
 
 .. code:: python
 	  
-   kappa_vals=np.linspace(0.01,25,100)
+   kappa_vals=np.linspace(0.01,,100)
    pdf_func = obl.cosi_pdf_interp
    # alternatively, you could do
    # pdf_func = obl.cosi_pdf
    # but that is MUCH slower
    kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_func = pdf_func) 
+
+   # estimate the confidence intervals
+   c = kappa_post.cumsum()/kappa_post.sum()
+   kappa_mid = kappa_vals[kappa_post == kappa_post.max()][0]
+   kappa_upp = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
+   kappa_low = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
+   
    
 If you plot the resulting concentration posterior, 
 
 .. code:: python
 
    plt.plot(kappa_vals,kappa_post)
+   plt.text(0.8,0.9,r'$\kappa=%.2f^{%.2f}_{%.2f}$' % (kappa_mid,kappa_upp-kappa_mid,kappa_mid-kappa_low))
+   plt.xlabel(r'$\kappa$')
+   plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
    plt.show()
 
 which should give you
