@@ -313,7 +313,7 @@ this analysis for the whole dataset, or separating between single-candidate star
    kappa_low_singles = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
    c = kappa_post_multis.cumsum()/kappa_post_multis.sum()
-   kappa_mid_multis = kappa_vals[np.abs(c - 0.50) == np.abs(c - 0.50).min()][
+   kappa_mid_multis = kappa_vals[np.abs(c - 0.50) == np.abs(c - 0.50).min()][0]
    kappa_upp_multis = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
    kappa_low_multis = kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0]
 
