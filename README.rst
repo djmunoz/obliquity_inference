@@ -189,13 +189,16 @@ Uniform distribution
 Let us use the some uniform distribution of stellar spin orientations from section
 3.2 above. We can use all these objects (and their respective inclination PDFs) to
 derive a PDF for the values of kappa that are consistent with such sample of inclinations.
+(this may take a few minutes, although it contains embarrassingly parallelizable loops)
 
 .. code:: python
 	  
    kappa_vals=np.linspace(0.01,25,100)
-   # this may take a few minutes
-   # (although it contains embarrassingly parallelizable loops)
-   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals) 
+   pdf_func = obl.cosi_pdf_interp
+   # alternatively, you could do
+   # pdf_func = obl.cosi_pdf
+   # but that is MUCH slower
+   kappa_post = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_func = pdf_func) 
    
 If you plot the resulting concentration posterior, 
 

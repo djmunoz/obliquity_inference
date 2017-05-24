@@ -1,4 +1,4 @@
-__all__ = ['cosi_pdf',
+__all__ = ['cosi_pdf','cosi_pdf_interp',
            'compute_kappa_posterior_from_cosI',
            'compute_kappa_posterior_from_lambda',
            'compute_cosipdf_from_dataframe',
@@ -10,7 +10,7 @@ __all__ = ['cosi_pdf',
            ]
            
 
-from cosi_pdf import cosi_pdf
+from cosi_pdf import cosi_pdf, cosi_pdf_interp
 from concentration_posterior import compute_kappa_posterior_from_cosI, \
     compute_kappa_posterior_from_lambda
 from inclination_posterior import compute_cosipdf_from_dataframe, \
