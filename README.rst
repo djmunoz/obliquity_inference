@@ -294,15 +294,26 @@ Hierarchical inference
 
    kappa_vals=np.linspace(0.01,100,150)
 	  
-   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals)
-   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles)
-   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis)
+   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_function = pdf_func)
+   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles,cosi_pdf_function = pdf_func)
+   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis,cosi_pdf_function = pdf_func)
+
+   c = kappa_post_all.cumsum()/kappa_post_all.sum()
+   kappa_mid_all = kappa_vals[kappa_post_all == kappa_post_all.max()][0]
+   kappa_upp_all = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
+   kappa_low_all = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
+
+   c = kappa_post_singles.cumsum()/kappa_post_singles.sum()
+   kappa_mid_singles = kappa_vals[kappa_post_singles == kappa_post_singles.max()][0]
+   kappa_upp_singles = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
+   kappa_low_singles = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
+
+   c = kappa_post_multis.cumsum()/kappa_post_multis.sum()
+   kappa_mid_multis = kappa_vals[kappa_post_multis == kappa_post_multis.max()][0]
+   kappa_upp_multis = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
+   kappa_low_multis = min(0,kappa_vals[np.abs(c - 0.16) == np.abs(c - 0.16).min()][0])
 
    
-   
-   cosi_vals_singles, cosipdf_singles = obl.read_cosipdf('post_singles.txt')
-   cosi_vals_multis, cosipdf_multis = obl.read_cosipdf('post_multis.txt')
-   cosi_vals_all, cosipdf_all = obl.read_cosipdf('post_all.txt')
 	  
 From these cosI PDFs, you can compute the kappa posterior
 	  
