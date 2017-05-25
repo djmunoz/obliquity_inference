@@ -15,6 +15,45 @@ Rsun_in_km = 6.957e5
 day_in_seconds = 86400.0
 
 
+def measure_interval(xpdf,x,sigma=1.0):
+    
+    pdf = xpdf[:]/trapz(xpdf,x=x)
+
+    prob_res_min,prob_res_max = 1.0/pdf.shape[0], np.abs(np.diff(pdf)).max()
+    prob_res = prob_res_min
+    
+    mode = pdf.max()
+    cumu = cumtrapz(pdf,x=x,initial=0)
+    dist_prob = np.abs(np.subtract.outer(cumu,cumu))
+    dist_x = np.abs(np.subtract.outer(x,x))
+
+    
+    enclosed_prob = round(spec.erf(sigma/np.sqrt(2)),4)
+    dist_prob[(dist_prob > (enclosed_prob + prob_res)) | (dist_prob < (enclosed_prob-prob_res))] = 0.0
+    while (len(dist_x[dist_prob != 0.0]) == 0):
+        prob_res *= 1.05
+        dist_prob[(dist_prob > (enclosed_prob + prob_res)) | (dist_prob < (enclosed_prob-prob_res))] = 0.0
+        if (prob_res > 0.5 * prob_res_max): return np.nan, np.nan,np.nan
+        
+    xind = np.where((dist_x == dist_x[dist_prob != 0.0].min()) & (dist_prob != 0.0))
+    low, upp = x[xind[0][0]], x[xind[1][0]]
+
+    MODE_THRESHOLD = 0.98
+    enclosed = pdf > MODE_THRESHOLD * mode
+
+    try:
+        mid = (trapz(x[enclosed]*pdf[enclosed],x=x[enclosed])/trapz(pdf[enclosed],x=x[enclosed]))
+    except RuntimeWarning:
+        try:
+            MODE_THRESHOLD = 0.95
+            enclosed = pdf > MODE_THRESHOLD * mode
+            mid = (trapz(x[enclosed]*pdf[enclosed],x=x[enclosed])/trapz(pdf[enclosed],x=x[enclosed]))
+        except RuntimeWarning:
+            mid = x[pdf == pdf.max()]
+            
+    return mid, upp, low
+
+
 def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
     """
     From (double sided) Gaussian distributions in rotational period and stellar radius,
