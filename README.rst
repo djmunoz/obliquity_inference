@@ -184,8 +184,8 @@ computed and added to the catalog dataframe by
 
 .. code:: python
 
-   compute_inclination_dataframe(df,posterior_list = [cosivals,cosipdf])
-   dir(df)
+   obl.compute_inclination_dataframe(df_synth,posterior_list = [cosivals,cosipdf])
+   list(df.columns)
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import scipy.special as spec
-from scipy.integrate import quad, cumtrapz
+from scipy.integrate import quad, cumtrapz,trapz
 from scipy.stats.distributions import norm
 
 """
