@@ -178,6 +178,14 @@ Even by eye, the distribution of PDFs is noticeably different respect to the uni
 Morton & Winn (2014) found that, except for 12 KOIs (out of 70), the orientation of the stellar spin is consistent
 with alignment with the planetary orbit.
 
+The inclination posteriors computed above can be used to derive representative
+values of the inclination angle within confidence intervals. These values can be
+computed and added to the catalog dataframe by
+
+.. code:: python
+
+   compute_inclination_dataframe(df,posterior_list = [cosivals,cosipdf])
+   dir(df)
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~

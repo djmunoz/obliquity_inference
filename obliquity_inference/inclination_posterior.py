@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import scipy.special as spec
-from scipy.integrate import quad
+from scipy.integrate import quad, cumtrapz
 from scipy.stats.distributions import norm
 
 """
@@ -85,6 +85,49 @@ def compute_equatorial_velocity_single(P,dP,R,dR,from_sample=True):
     return veq_mid,veq_upper_err, veq_lower_err
 
 
+def inclination_value_from_posterior(cosi_vals,cosi_posterior, normalized = False):
+
+    if (normalized is False):
+        normalize = trapz(cosi_posterior,x=cosi_vals)
+        cosi_posterior[:]/=normalize
+    
+    mid, upp, low =  measure_interval(cosi_posterior,cosi_vals,sigma=1)
+    mode = cosi_vals[cosi_posterior == cosi_posterior.max()][0]
+    cum = cumtrapz(cosi_posterior,x=cosi_vals,initial=0)
+    lim95 = cosi_vals[(cum >= 0.05)][0]
+    
+    I = round(np.arccos(mid)*180.0/np.pi,3)
+    dI_minus = I - round(np.arccos(upp)*180.0/np.pi,3)
+    dI_plus = round(np.arccos(low)*180.0/np.pi,3) - I
+    I_ul = round(np.arccos(lim95)*180.0/np.pi,3)
+    
+    return I,dI_plus,dI_minus,I_ul
+
+
+def compute_inclination_single(Vsini,dVsini,Veq,dVeq,analytic_approx = True):
+    
+    """
+    Obtain a posterior probability distribution given the data
+    in Vsini and Veq. From the posterior, obtain representative
+    values from confidence intervals.
+    
+    """
+    cosi_arr = 1.0-np.logspace(0,-3,600)
+    cosi_arr = np.linspace(0.0,0.99999999,400)
+
+    if (analytic_approx):
+        post = np.asarray([posterior_cosi_analytic(c,Vsini,dVsini,Veq,dVeq) for c in cosi_arr])
+    else:
+        post = np.asarray([posterior_cosi_full(c,Vsini,dVsini,Veq,dVeq) for c in cosi_arr])
+
+        
+    I,dI_plus,dI_minus,I_ul =  inclination_value_from_posterior(cosi_arr,post)
+
+    
+    return I,dI_plus,dI_minus,I_ul,post
+
+
+
 def compute_equatorial_velocity_dataframe(df,columns = None):
 
     """
@@ -111,6 +154,35 @@ def compute_equatorial_velocity_dataframe(df,columns = None):
         df.set_value(index, 'dVeq_minus', dVeq_minus)
         
     return None
+
+
+def compute_inclination_dataframe(df, columns = None, posterior_list = None):
+
+    if (columns is None):
+        columns = ['Vsini','dVsini','Veq','dVeq_plus','dVeq_minus']
+    
+    df['I'] = pd.Series(np.zeros(df.shape[0]))
+    df['dI_plus'] = pd.Series(np.zeros(df.shape[0]))
+    df['dI_minus'] = pd.Series(np.zeros(df.shape[0]))
+    df['I_ul95'] = pd.Series(np.zeros(df.shape[0]))
+    
+    for index,row in df.iterrows():
+        if (posterior_list is not None): # if we already have the full posteriors
+            post = posterior_list[1][index] # assuming data frame and posterior list are index-aligned
+            I,dI_plus,dI_minus,I_ul95 = inclination_value_from_posterior(posterior_list[0],post)
+        else: # otherwise recompute them
+            Vsini0 = row[columns[0]]
+            dVsini0 = row[columns[1]]
+            Veq0 = row[columns[2]]
+            dVeq0 = 0.5 * (row['dVeq_minus']+row['dVeq_plus'])
+            I,dI_plus,dI_minus,I_ul95, post = compute_inclination_single(Vsini0,dVsini0,Veq0,dVeq0)
+            
+        df.set_value(index, 'I', I)
+        df.set_value(index, 'dI_plus', dI_plus)
+        df.set_value(index, 'dI_minus', dI_minus)
+        df.set_value(index, 'I_ul95', I_ul95)
+
+
 
 
 
@@ -157,7 +229,7 @@ def  compute_cosipdf_from_dataframe(df, columns = ['Vsini','dVsini','Veq','dVeq_
         if (analytic_approx):
             post_list.append(np.asarray([posterior_cosi_analytic(c,vs,dvs,veq,dveq) for c in cosi_arr]))
         else:
-            post_list.append(np.asarray([posterior_cosi_analytic(c,vs,dvs,veq,dveq) for c in cosi_arr]))
+            post_list.append(np.asarray([posterior_cosi_full(c,vs,dvs,veq,dveq) for c in cosi_arr]))
         
         
 
