@@ -186,8 +186,11 @@ computed and added to the catalog dataframe by
 .. code:: python
 
    obl.compute_inclination_dataframe(df_synth,posterior_list = [cosi_vals,cosipdf])
-   list(df.columns)
+   list(df_syth.columns)
 
+which shows that we have added four more columns to the dataframe: :code:`['Vsini', 'dVsini', 'Veq', 'dVeq_plus', 'dVeq_minus', 'I', 'dI_plus', 'dI_minus', 'I_ul95']`.
+
+You can compare the "measured" inclinations with the original ones in the synthetic sample before noise was added.
 
 .. code:: python
 	  
@@ -199,6 +202,9 @@ computed and added to the catalog dataframe by
    plt.axes().set_aspect(1.0)
    plt.show()
 
+.. image:: example_figures/measured_inclinations.png
+
+   
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~
 
