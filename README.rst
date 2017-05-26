@@ -184,8 +184,19 @@ computed and added to the catalog dataframe by
 
 .. code:: python
 
-   obl.compute_inclination_dataframe(df_synth,posterior_list = [cosivals,cosipdf])
+   obl.compute_inclination_dataframe(df_synth,posterior_list = [cosi_vals,cosipdf])
    list(df.columns)
+
+
+.. code:: python
+	  
+   plt.errorbar(np.arccos(cosi)*180.0/np.pi,df_synth['I'],yerr=[df_synth['dI_minus'],df_synth['dI_plus']],fmt='s')
+   plt.plot([0,90],[0,90],'k',ls=':',zorder=0)
+   plt.axis([0,95,0,95])
+   plt.xlabel(r'$I[^\circ]$' (true))
+   plt.ylabel(r'$I[^\circ]$' (measured))
+   plt.aspect(1.0)
+   plt.show()
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
 ~~~~~~~~

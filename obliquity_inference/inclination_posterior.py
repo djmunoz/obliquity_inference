@@ -207,7 +207,7 @@ def compute_inclination_dataframe(df, columns = None, posterior_list = None):
     
     for index,row in df.iterrows():
         if (posterior_list is not None): # if we already have the full posteriors
-            post = posterior_list[1][index] # assuming data frame and posterior list are index-aligned
+            post = posterior_list[1][index-1] # assuming data frame and posterior list are index-aligned
             I,dI_plus,dI_minus,I_ul95 = inclination_value_from_posterior(posterior_list[0],post)
         else: # otherwise recompute them
             Vsini0 = row[columns[0]]
