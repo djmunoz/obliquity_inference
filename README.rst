@@ -192,10 +192,10 @@ computed and added to the catalog dataframe by
 .. code:: python
 	  
    plt.errorbar(np.arccos(cosi)*180.0/np.pi,df_synth['I'],yerr=[df_synth['dI_minus'],df_synth['dI_plus']],fmt='s')
-   plt.plot([0,90],[0,90],'k',ls=':',zorder=0)
+   plt.plot([0,95],[0,95],'k',ls=':',zorder=0)
    plt.axis([0,95,0,95])
-   plt.xlabel(r'$I[^\circ]$ (true)')
-   plt.ylabel(r'$I[^\circ]$ (measured)')
+   plt.xlabel(r'$I[^\circ]$ (true)',size=18)
+   plt.ylabel(r'$I[^\circ]$ (measured)',size=18)
    plt.axes().set_aspect(1.0)
    plt.show()
 
