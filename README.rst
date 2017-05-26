@@ -195,7 +195,7 @@ computed and added to the catalog dataframe by
    plt.axis([0,95,0,95])
    plt.xlabel(r'$I[^\circ]$' (true))
    plt.ylabel(r'$I[^\circ]$' (measured))
-   plt.aspect(1.0)
+   plt.axes().set_aspect(1.0)
    plt.show()
 
 Combining MULTIPLE *cosI* PDFs to perform hierarchical Bayesian inference on the "concentration" parameter
