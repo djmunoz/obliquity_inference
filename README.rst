@@ -117,6 +117,7 @@ Let us create a synthetic random (uniform) sample of stellar orientations and sa
    import obliquity_inference as obl
    
    # create 100 stars oriented randomly
+   np.random.seed(42)
    Nstars = 100
    cosi = np.random.random(Nstars)
    lamb = np.random.random(Nstars) * 2 * np.pi
@@ -193,8 +194,8 @@ computed and added to the catalog dataframe by
    plt.errorbar(np.arccos(cosi)*180.0/np.pi,df_synth['I'],yerr=[df_synth['dI_minus'],df_synth['dI_plus']],fmt='s')
    plt.plot([0,90],[0,90],'k',ls=':',zorder=0)
    plt.axis([0,95,0,95])
-   plt.xlabel(r'$I[^\circ]$' (true))
-   plt.ylabel(r'$I[^\circ]$' (measured))
+   plt.xlabel(r'$I[^\circ]$ (true)')
+   plt.ylabel(r'$I[^\circ]$ (measured)')
    plt.axes().set_aspect(1.0)
    plt.show()
 
