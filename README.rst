@@ -78,7 +78,7 @@ you can use the analytic approximation of Munoz & Perets (2017)
 .. code:: python
 
    cosi_arr = np.linspace(0.0,0.99999999,300)
-   post = np.asarray([posterior_cosi_analytic(c,Vsini0,dVsini0,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
+   post = np.asarray([obl.posterior_cosi_analytic(c,Vsini0,dVsini0,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
 
 For example, if you have :code:`Vsini=4.0`, :code:`dVsini=1.16`, :code:`Veq=1.12`, :code:`dVeq_plus=0.42`
 and :code:`Veq_minus=0.25`, then we can compute
@@ -90,7 +90,7 @@ and :code:`Veq_minus=0.25`, then we can compute
    dVeq = np.sqrt(dVeq_plus**2 + dVeq_minus**2)
 
    cosi_arr = np.linspace(0.0,0.99999999,300)
-   post = np.asarray([posterior_cosi_analytic(c,Vsini,dVsini,Veq,dVeq) for c in cosi_arr])
+   post = np.asarray([obl.posterior_cosi_analytic(c,Vsini,dVsini,Veq,dVeq) for c in cosi_arr])
 
    import matplotlib.pyplot as plt
    plt.plot(cosi_arr, post)
