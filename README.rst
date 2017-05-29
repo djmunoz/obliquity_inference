@@ -89,8 +89,12 @@ and :code:`Veq_minus=0.25`, then we can compute
    Veq, dVeq_plus, dVeq_minus = 1.12, 0.42, 0.25
    dVeq = np.sqrt(dVeq_plus**2 + dVeq_minus**2)
 
+   cosi_arr = np.linspace(0.0,0.99999999,300)
    post = np.asarray([posterior_cosi_analytic(c,Vsini,dVsini,Veq,dVeq) for c in cosi_arr])
-   
+
+   import matplotlib.pyplot as plt
+   plt.plot(cosi_arr, post)
+   plt.show()
 
 
 Computing a set of *cosI* PDFs from a CSV file/dataset
