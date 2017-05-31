@@ -430,8 +430,9 @@ The calculation presented above is reproduced if
    kappa_post_2 = np.exp(kappa_loglike_contr[:,np.invert(ind)].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
    kappa_post_1 /= trapz(kappa_post_1,x=kappa_vals)
    kappa_post_2 /= trapz(kappa_post_2,x=kappa_vals)
+   distance = obl.hellinger_dist(kappa_post_1,kappa_post_2,kappa_vals)
 
-But what we want is to produce 1000 random two-sample separations and compute the squared Hellinger distance for each. We can
+What we want is to produce 1000 random two-sample separations and compute the squared Hellinger distance for each. We can
 do that by generating and index array containing a number of :code:`True` entries equal to :code:`size1` and a number of :code:`False`
 entries equal to :code:`size2`:
    
