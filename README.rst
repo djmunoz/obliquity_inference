@@ -344,6 +344,11 @@ this analysis for the whole dataset, or separating between single-candidate star
    kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles,cosi_pdf_function = pdf_func)
    kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis,cosi_pdf_function = pdf_func)
 
+   from scipy.integrate import trapz
+   kappa_post_all /= trapz(kappa_post_all,x=kappa_vals)
+   kappa_post_singles /= trapz(kappa_post_singles,x=kappa_vals)
+   kappa_post_multis /= trapz(kappa_post_multis,x=kappa_vals)
+   
    c = kappa_post_all.cumsum()/kappa_post_all.sum()
    kappa_mid_all = kappa_vals[kappa_post_all == kappa_post_all.max()][0]
    kappa_upp_all = kappa_vals[np.abs(c - 0.84) == np.abs(c - 0.84).min()][0]
