@@ -382,6 +382,9 @@ And we can plot the results
 
 Which is consistent with Figure 6 of Morton & Winn (2014).
 
+Statistical significance:
+.....
+
 Basic Tutorial #2: Using lambda
 --------
 
