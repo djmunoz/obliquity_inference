@@ -417,8 +417,8 @@ The calculation presented above is reproduced if
    ind = df_mw['Nplanets'] == 1
    kappa_post_1 = np.exp(kappa_loglike_contr[:,ind].sum(axis = 1)) * obl.kappa_prior_function(kappa)
    kappa_post_2 = np.exp(kappa_loglike_contr[:,np.invert(ind)].sum(axis = 1)) * obl.kappa_prior_function(kappa)
-   kappa_post_1 /= trapz(kappa_post_1,x=kappa)
-   kappa_post_2 /= trapz(kappa_post_2,x=kappa)
+   kappa_post_1 /= trapz(kappa_post_1,x=kappa_vals)
+   kappa_post_2 /= trapz(kappa_post_2,x=kappa_vals)
 
 
 
