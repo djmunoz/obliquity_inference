@@ -338,7 +338,7 @@ this analysis for the whole dataset, or separating between single-candidate star
   
 .. code:: python
 
-   kappa_vals=np.linspace(0.01,100,150)
+   kappa_vals=np.linspace(0.01,120,300)
 	  
    kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_function = pdf_func)
    kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles,cosi_pdf_function = pdf_func)
@@ -380,6 +380,7 @@ And we can plot the results
    plt.legend(loc='upper right')
    plt.xlabel(r'$\kappa$',size=18)
    plt.ylabel(r'PDF   $p(\kappa|\{cos I_{*,k}\})$',size=18)
+   plt.xlim(0,100)
    plt.show()
    
 
