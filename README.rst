@@ -371,11 +371,11 @@ And we can plot the results
    plt.plot(kappa_vals,kappa_post_all,color='k',lw=2.0,label='all')
    plt.plot(kappa_vals,kappa_post_singles,color='b',label='singles')
    plt.plot(kappa_vals,kappa_post_multis,color='r',label='multis')
-   plt.text(10,0.17,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+   plt.text(10,max(kappa_post_all),r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_all,kappa_upp_all-kappa_mid_all,kappa_mid_all-kappa_low_all),size=20)
-   plt.text(4,0.23,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+   plt.text(4,max(kappa_post_singles),r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_singles,kappa_upp_singles-kappa_mid_singles,kappa_mid_singles-kappa_low_singles),size=20,color='b')
-   plt.text(20,0.02,r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
+   plt.text(20,max(kappa_post_multis),r'$\kappa=%.2f^{+%.2f}_{-%.2f}$'\
 	  % (kappa_mid_multis,kappa_upp_multis-kappa_mid_multis,kappa_mid_multis-kappa_low_multis),size=20,color='r')
    plt.legend(loc='upper right')
    plt.xlabel(r'$\kappa$',size=18)
