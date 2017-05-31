@@ -11,3 +11,5 @@ def hellinger_distance(sample1,sample2,x):
 def total_variation_distance(sample1,sample2,x):
 
     delta = max(np.abs(np.asarray(sample1)[:]-np.asarray(sample2[:])))
+
+    return delta
