@@ -450,6 +450,18 @@ entries equal to :code:`size2`:
           kappa_post_groupb /= trapz(kappa_post_groupb,x=kappa_vals)
           hellinger_list[jj]= obl.hellinger_distance(kappa_post_groupa,kappa_post_groupb,kappa_vals)
 
+   tvd_list = np.zeros(draws)
+   for jj in range(draws):
+	  indices = np.random.permutation(indices)
+	  print indices[indices == True].shape[0], indices[indices == False].shape[0]
+	  kappa_post_groupa = np.exp(kappa_loglike_contr[:,indices].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
+	  kappa_post_groupb = np.exp(kappa_loglike_contr[:,np.invert(indices)].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
+          kappa_post_groupa /= trapz(kappa_post_groupa,x=kappa_vals)
+          kappa_post_groupb /= trapz(kappa_post_groupb,x=kappa_vals)
+          tvd_list[jj]= obl.total_variation_distance(kappa_post_groupa,kappa_post_groupb,kappa_vals)
+
+
+	  
 Basic Tutorial #2: Using lambda
 --------
 
