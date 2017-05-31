@@ -397,7 +397,7 @@ distributions above:
 
 .. code:: python
  
-   print hellinger_distance(kappa_post_singles,kappa_post_mults,kappa_vals)
+   print obl.hellinger_distance(kappa_post_singles,kappa_post_multis,kappa_vals)
 
 
 To get a distribution of "hellinger distances" and therefore assess how likely it is to obtained
