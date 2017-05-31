@@ -417,20 +417,34 @@ For this, we use
 .. code:: python
 
    # for all targets in the sample
-   kappa_loglike_contr = obl.compute_hierachical_likelihood_contributions(kappa_vals,obl.cosi_pdf_interp,cosi_vals,cosipdf, K = 1000)
+   kappa_loglike_contr = obl.compute_hierachical_likelihood_contributions(kappa_vals,\
+                                                                          obl.cosi_pdf_interp,cosi_vals,cosipdf,\
+                                                                          K = 1000)
 
 The calculation presented above is reproduced if
 
 .. code:: python
 	  
    ind = df_mw['Nplanets'] == 1
-   kappa_post_1 = np.exp(kappa_loglike_contr[:,ind].sum(axis = 1)) * obl.kappa_prior_function(kappa)
-   kappa_post_2 = np.exp(kappa_loglike_contr[:,np.invert(ind)].sum(axis = 1)) * obl.kappa_prior_function(kappa)
+   kappa_post_1 = np.exp(kappa_loglike_contr[:,ind].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
+   kappa_post_2 = np.exp(kappa_loglike_contr[:,np.invert(ind)].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
    kappa_post_1 /= trapz(kappa_post_1,x=kappa_vals)
    kappa_post_2 /= trapz(kappa_post_2,x=kappa_vals)
 
-
+But what we want is to produce 1000 random two-sample separations and compute the squared Hellinger distance for each. We can
+do that by generating and index array containing a number of :code:`True` entries equal to :code:`size1` and a number of :code:`False`
+entries equal to :code:`size2`:
    
+.. code:: python
+
+    hellinger_list = np.zeros(draws)
+    for jj in range(draws):
+        indices = np.random.permutation(indices)
+        kappa_post_groupa = np.exp(kappa_loglike_contr[:,indices].sum(axis = 1)) * obl.kappa_prior_function(kappa)
+        kappa_post_groupb = np.exp(kappa_loglike_contr[:,np.invert(indices)].sum(axis = 1)) * obl.kappa_prior_function(kappa)
+        kappa_post_groupa /= trapz(kappa_post_groupa,x=kappa)
+        kappa_post_groupb /= trapz(kappa_post_groupb,x=kappa)
+        hellinger_list[jj]= hellinger_distance(kappa_post_groupa,kappa_post_groupb,kappa)
 
 Basic Tutorial #2: Using lambda
 --------
