@@ -393,14 +393,33 @@ resampling/subset extraction to compute how likely that given difference metric
 is to occur in random subdivisions of the original data.
 
 For this, we can repeat the separation of the data sets into two subsets of
-sizes :code:`size1` and :code:`size2` a  total of :code:`draw` times.
+sizes :code:`size1` and :code:`size2` a  total of :code:`draw=1000` times.
 
 .. code:: python
 
    size1, size2 = len(cosipdf_singles), len(cosipdf_multis)
    print size1, size2
 
+A more efficient way of carrying out this Monte Carlo experiment is to keep all
+the contributions of each measurement to loglikelihood in the hierarchical inference calculation,
+and sum them together according to random assingments to :code:`dataset1` and :code:`dataset1`.
+For this, we use
+
+.. code:: python
+
+   # for all targets in the sample
+   kappa_loglike_contr = obl.compute_hierachical_likelihood_contributions(kappa_vals,obl.cosi_pdf_interp,cosivals,cosipdf, K = 1000)
+
+The calculation presented above is reproduced if
+
+.. code:: python
 	  
+   ind = df_mw['Nplanets'] == 1
+   kappa_post_1 = np.exp(kappa_loglike_contr[:,ind].sum(axis = 1)) * obl.kappa_prior_function(kappa)
+   kappa_post_2 = np.exp(kappa_loglike_contr[:,np.invert(ind)].sum(axis = 1)) * obl.kappa_prior_function(kappa)
+   kappa_post_1 /= trapz(kappa_post_1,x=kappa)
+   kappa_post_2 /= trapz(kappa_post_2,x=kappa)
+
 
 
 
