@@ -331,7 +331,7 @@ We can also produce the same plot by computing the actual cosI PDFs without the 
 
 .. code:: python
 	  
-   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_mw,Npoints=1000)
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_mw,Npoints=1000, analytic_approx= False)
    cosi_vals_singles, cosipdf_singles = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] == 1],\
 	                                                                   Npoints=1000, analytic_approx= False)
    cosi_vals_multis, cosipdf_multis = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] > 1], \
