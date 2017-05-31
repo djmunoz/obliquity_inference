@@ -327,7 +327,19 @@ Next, you compute the inclination posteriors as in Section 3.3.1 above. We can u
            
    .. image:: example_figures/mw_inc_post.png
 
+We can also produce the same plot by computing the actual cosI PDFs without the analytic approximation
 
+.. code:: python
+	  
+   cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_mw,Npoints=1000)
+   cosi_vals_singles, cosipdf_singles = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] == 1],\
+	                                                                   Npoints=1000, analytic_approx= False)
+   cosi_vals_multis, cosipdf_multis = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] > 1], \
+	                                                                 Npoints=1000, analytic_approx= False)
+
+   
+
+	      
 Hierarchical inference
 ::::::::
 
