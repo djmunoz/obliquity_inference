@@ -385,6 +385,25 @@ Which is consistent with Figure 6 of Morton & Winn (2014).
 Statistical significance:
 .....
 
+The two-sample separation carried out above could also be the result
+of arbitrarily separating a data sample into two smaller subsets. To address
+the significance of the difference between the two subsets we need to: (1) come
+of with a distance or difference metric; and (2) carry out a Monte Carlo
+resampling/subset extraction to compute how likely that given difference metric
+is to occur in random subdivisions of the original data.
+
+For this, we can repeat the separation of the data sets into two subsets of
+sizes :code:`size1` and :code:`size2` a  total of :code:`draw` times.
+
+.. code:: python
+
+   size1, size2 = len(cosipdf_singles), len(cosipdf_multis)
+   print size1, size2
+
+	  
+
+
+
 Basic Tutorial #2: Using lambda
 --------
 
