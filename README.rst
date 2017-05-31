@@ -340,9 +340,9 @@ this analysis for the whole dataset, or separating between single-candidate star
 
    kappa_vals=np.linspace(0.01,120,300)
 	  
-   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_function = pdf_func)
-   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles,cosi_pdf_function = pdf_func)
-   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis,cosi_pdf_function = pdf_func)
+   kappa_post_all = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf,cosi_vals,cosi_pdf_function = pdf_func,K=1000)
+   kappa_post_singles = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_singles,cosi_vals_singles,cosi_pdf_function = pdf_func,K=1000)
+   kappa_post_multis = obl.compute_kappa_posterior_from_cosI(kappa_vals,cosipdf_multis,cosi_vals_multis,cosi_pdf_function = pdf_func,K=1000)
 
    from scipy.integrate import trapz, cumtrapz
    kappa_post_all /= trapz(kappa_post_all,x=kappa_vals)
