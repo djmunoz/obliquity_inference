@@ -392,7 +392,16 @@ of with a distance or difference metric; and (2) carry out a Monte Carlo
 resampling/subset extraction to compute how likely that given difference metric
 is to occur in random subdivisions of the original data.
 
-For this, we can repeat the separation of the data sets into two subsets of
+As a metric of difference, we use the squared Hellinger distance, which is included in the repository. For the two-sample kappa
+distributions above:
+
+.. code:: python
+ 
+   print hellinger_distance(kappa_post_singles,kappa_post_mults,kappa_vals)
+
+
+To get a distribution of "hellinger distances" and therefore assess how likely it is to obtained
+the reall metric above out of random chance, we need to repeat the separation of the data sets into two random subsets of
 sizes :code:`size1` and :code:`size2` a  total of :code:`draw=1000` times.
 
 .. code:: python
@@ -408,7 +417,7 @@ For this, we use
 .. code:: python
 
    # for all targets in the sample
-   kappa_loglike_contr = obl.compute_hierachical_likelihood_contributions(kappa_vals,obl.cosi_pdf_interp,cosivals,cosipdf, K = 1000)
+   kappa_loglike_contr = obl.compute_hierachical_likelihood_contributions(kappa_vals,obl.cosi_pdf_interp,cosi_vals,cosipdf, K = 1000)
 
 The calculation presented above is reproduced if
 
@@ -421,7 +430,7 @@ The calculation presented above is reproduced if
    kappa_post_2 /= trapz(kappa_post_2,x=kappa_vals)
 
 
-
+   
 
 Basic Tutorial #2: Using lambda
 --------
