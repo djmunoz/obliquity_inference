@@ -26,10 +26,6 @@ if __name__ == "__main__":
     ind = df_mw['Nplanets'] == 1
     cosipdf_singles = np.asarray(cosipdf)[ind].tolist()
     cosipdf_multis = np.asarray(cosipdf)[np.invert(ind)].tolist()
-    print np.asarray(cosipdf_singles).shape
-    print np.asarray(cosipdf_multis).shape
-    #cosi_vals_singles, cosipdf_singles = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] == 1],Npoints=400)
-    #cosi_vals_multis, cosipdf_multis = obl.compute_cosipdf_from_dataframe(df_mw[df_mw['Nplanets'] > 1],Npoints=400)
 
 
     # plot the inclination posteriors
@@ -43,6 +39,22 @@ if __name__ == "__main__":
     plt.savefig('./mw_inc_post.png')
     #plt.show()
     plt.clf()
+
+    # Compute the cosI posteriors *WITHOUT* approximations
+    cosi_vals, cosipdf = obl.compute_cosipdf_from_dataframe(df_mw,Npoints=1000, analytic_approx= False, add_to_dataframe = True)
+
+    for pdf in cosipdf_singles: plt.plot(cosi_vals,pdf,color='b',lw=0.6)
+    for pdf in cosipdf_multis: plt.plot(cosi_vals,pdf,color='r',lw=0.6)
+    plt.plot([np.nan],[np.nan],color='b',label='singles')
+    plt.plot([np.nan],[np.nan],color='r',label='multis')
+    plt.legend(loc='upper left')
+    plt.xlabel(r'$\cos I_{*,k}$',size=20)
+    plt.ylabel(r'PDF   $p(\cos I_{*,k}| D)$',size=18)
+    plt.savefig('./mw_inc_post_noapprox.png')
+    #plt.show()
+    plt.clf()
+    
+    df_mw.to_csv('./morton2014_processed.csv')
 
     
     # compute kappa posteriors
@@ -63,6 +75,8 @@ if __name__ == "__main__":
     kappa_post_singles /= trapz(kappa_post_singles,x=kappa_vals)
     kappa_post_multis /= trapz(kappa_post_multis,x=kappa_vals)
 
+    hel_dist = obl.hellinger_distance(kappa_post_singles,kappa_post_multis,kappa_vals)
+    
     plt.plot(kappa_vals,kappa_post_all,color='k',lw=2.0,label='all')
     plt.plot(kappa_vals,kappa_post_singles,color='b',label='singles')
     plt.plot(kappa_vals,kappa_post_multis,color='r',label='multis')
@@ -72,4 +86,21 @@ if __name__ == "__main__":
     plt.xlim(0,100)
     plt.show()
 
+    # Compute the significance of the two-sample separation
+
+    # for all targets in the sample
+    kappa_loglike_contr = obl.compute_hierachical_likelihood_contributions(kappa_vals,\
+                                                                           obl.cosi_pdf_interp,cosi_vals,cosipdf,\
+                                                                           K = 1000)
+
+    indices = np.random.permutation(np.append(np.ones(size1),np.zeros(size2)).astype(bool))
+    draws = 1000
+    hellinger_list = np.zeros(draws)
+    for jj in range(draws):
+        indices = np.random.permutation(indices)
+        kappa_post_groupa = np.exp(kappa_loglike_contr[:,indices].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
+        kappa_post_groupb = np.exp(kappa_loglike_contr[:,np.invert(indices)].sum(axis = 1)) * obl.kappa_prior_function(kappa_vals)
+        kappa_post_groupa /= trapz(kappa_post_groupa,x=kappa_vals)
+        kappa_post_groupb /= trapz(kappa_post_groupb,x=kappa_vals)
+        hellinger_list[jj]= obl.hellinger_distance(kappa_post_groupa,kappa_post_groupb,kappa_vals)
     

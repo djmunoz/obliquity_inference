@@ -14,11 +14,11 @@ def sample_distribution(dist_grid,val_grid,nsamples=1):
     Nsamples from a tabulated posterior 
     """
 
-    cdf = cumtrapz(dist_grid,val_grid)
-    cdf /= cdf.max()
+    cdf = cumtrapz(dist_grid,x=val_grid)
+    cdf /= max(cdf)
     u = np.random.random(size=nsamples)
     inds = np.digitize(u,cdf)
-    vals= val_grid[inds]
+    vals= np.asarray(val_grid)[inds]
 
     
     return vals
