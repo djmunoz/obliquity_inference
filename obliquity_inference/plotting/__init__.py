@@ -1,5 +1,4 @@
-__all__ = ['scatter_velocities'
-           ]
-           
+__all__ = ['scatter_velocities']
 
-from obliquity_plots import scatter_velocities
+from plotting import scatter_velocities
+
