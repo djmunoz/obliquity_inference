@@ -9,6 +9,6 @@ setup(
     #                 'obliquity_inference.plotting': 'obliquity_inference/plotting'},
     #packages = ['obliquity_inference','obliquity_inference.plotting'],
     packages = ['obliquity_inference'],
-    ext_modules=[Extension('obliquity_inference._cosi_pdf',['./cython/_cosi_pdf.pyx'],include_dirs=[numpy.get_include()])],
+    ext_modules=[Extension('_cosi_pdf',['./cython/_cosi_pdf.pyx'],include_dirs=[numpy.get_include()])],
     cmdclass = {'build_ext': build_ext}
 )
