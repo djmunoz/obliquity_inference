@@ -1,6 +1,7 @@
 from _cosi_pdf import _cosi_pdf
 import numpy as np
 from scipy.interpolate import RectBivariateSpline
+import os
 import warnings
 warnings.filterwarnings("ignore")
 from obliquity_inference import data_dir
