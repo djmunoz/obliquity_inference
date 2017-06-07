@@ -16,7 +16,9 @@ __all__ = ['cosi_pdf','cosi_pdf_interp',
            'hellinger_distance',
            'total_variation_distance'
            ]
-           
+
+data_dir = os.path.join(os.path.dirname(__file__), 'data')
+
 from cosi_pdf import cosi_pdf, cosi_pdf_interp
 from lambda_pdf import lambda_pdf, lambda_pdf_interp
 from concentration_posterior import compute_kappa_posterior_from_cosI, \

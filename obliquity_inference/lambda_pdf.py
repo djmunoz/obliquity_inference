@@ -5,8 +5,7 @@ from scipy.interpolate import RectBivariateSpline
 from scipy.integrate import quad
 import warnings
 warnings.filterwarnings("ignore")
-
-data_dir = os.path.join(os.path.dirname(__file__), 'data')
+from obliquity_inference import data_dir
 
 def lambda_integrand(y, k, l):
     """
