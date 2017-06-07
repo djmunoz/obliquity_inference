@@ -30,7 +30,8 @@ def kappa_prior_function(k):
     return 1.0 / (1 + k**2)**0.75
 
 
-def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals, cosi_pdf_function = cosi_pdf,full = False, K = 1000):
+def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals, cosi_pdf_function = cosi_pdf,
+                                      k_samples = True, full = False, K = 1000):
 
     """
     Use a collection of PDFs (N different stars) for cosI - the cosine of the
@@ -49,6 +50,7 @@ def compute_kappa_posterior_from_cosI(kappa_vals,cosi_post_list,cosi_vals, cosi_
     concentration_likelihood = compute_hierachical_likelihood(kappa_vals,cosi_pdf_function,
                                                               cosi_vals,cosi_post_list,
                                                               y_measurement_priors=cosi_prior_list,
+                                                              k_samples = k_samples,
                                                               K = K,
                                                               full = full)
 
@@ -63,11 +65,30 @@ def compute_two_population_significance(kappa_vals,cosi_post_list,cosi_vals,size
     
 
 
-def compute_kappa_posterior_from_lambda():
+def compute_kappa_posterior_from_lambda(kappa_vals,lambda_post_list,lambda_vals,lambda_pdf_function = lambda_pdf,
+                                        k_samples = True, full = False, K = 1000):
     """
     Use a collection of PDFs (N different stars) for lambda - the sky-projected
     spin-orbit misalignment
 
     """
 
-    return concentration_posterior
+    concentration_prior = np.vectorize(kappa_prior_function)(kappa_vals)
+
+    # Prepare the lambda prior for each target
+    lambda_prior_list = []
+    for k in range(len(lambda_post_list)):
+        lambda_prior_list.append(np.ones(len(lambda_post_list[k]))) # for now, just a flat prior
+        
+    lambda_prior_list = None
+    concentration_likelihood = compute_hierachical_likelihood(kappa_vals,lambda_pdf_function,
+                                                              lambda_vals,lambda_post_list,
+                                                              y_measurement_priors=lambda_prior_list,
+                                                              k_samples = k_samples,
+                                                              K = K,
+                                                              full = full)
+
+    concentration_posterior = concentration_likelihood[:] * concentration_prior[:]
+    
+    
+    return concentration_posterior/trapz(concentration_posterior,x=kappa_vals)

@@ -1,10 +1,13 @@
 import numpy as np
 import pandas as pd
-import scipy.special as spec
+from scipy.special import erf
 from scipy.integrate import quad, cumtrapz,trapz
 from scipy.stats.distributions import norm
 from scipy.stats import gaussian_kde
+from sklearn.neighbors import KernelDensity
+from significance import hellinger_distance
 from hierarchical_inference import update_progress
+import matplotlib.pyplot as plt
 
 """
 Bayesian inference routines for the line-of-star inclination of a single star
@@ -16,42 +19,82 @@ ALPHA = 0.23
 Rsun_in_km = 6.957e5
 day_in_seconds = 86400.0
 
+def kde_sklearn(x, x_grid, bandwidth=0.2, **kwargs):
+    """Kernel Density Estimation with Scikit-learn"""
+    kde_skl = KernelDensity(bandwidth=bandwidth, **kwargs)
+    kde_skl.fit(x[:, np.newaxis])
+    # score_samples() returns the log-likelihood of the samples
+    log_pdf = kde_skl.score_samples(x_grid[:, np.newaxis])
+    return np.exp(log_pdf)
 
-def measure_interval(xpdf,x,sigma=1.0):
+def measure_interval(xpdf,x=None,sigma=1.0,style='enclosed'):
+
+    if (x is None):
+        x = np.arange(len(xpdf))
     
     pdf = xpdf[:]/trapz(xpdf,x=x)
 
     prob_res_min,prob_res_max = 1.0/pdf.shape[0], np.abs(np.diff(pdf)).max()
     prob_res = prob_res_min
     
-    mode = pdf.max()
+
     cumu = cumtrapz(pdf,x=x,initial=0)
-    dist_prob = np.abs(np.subtract.outer(cumu,cumu))
-    dist_x = np.abs(np.subtract.outer(x,x))
 
-    
-    enclosed_prob = round(spec.erf(sigma/np.sqrt(2)),4)
-    dist_prob[(dist_prob > (enclosed_prob + prob_res)) | (dist_prob < (enclosed_prob-prob_res))] = 0.0
-    while (len(dist_x[dist_prob != 0.0]) == 0):
-        prob_res *= 1.05
-        dist_prob[(dist_prob > (enclosed_prob + prob_res)) | (dist_prob < (enclosed_prob-prob_res))] = 0.0
-        if (prob_res > 0.5 * prob_res_max): return np.nan, np.nan,np.nan
+    enclosed_prob = round(erf(sigma/np.sqrt(2)),4)
+    lower_prob,upper_prob = 0.5 - enclosed_prob/2, 0.5 + enclosed_prob/2
+     
+    def find_weighted_mode(f,y):
+        MODE_THRESHOLD = 0.98
+        mode = f.max()
+        enclosed = f > MODE_THRESHOLD * mode
         
-    xind = np.where((dist_x == dist_x[dist_prob != 0.0].min()) & (dist_prob != 0.0))
-    low, upp = x[xind[0][0]], x[xind[1][0]]
-    MODE_THRESHOLD = 0.98
-    enclosed = pdf > MODE_THRESHOLD * mode
-
-    try:
-        mid = (trapz(x[enclosed]*pdf[enclosed],x=x[enclosed])/trapz(pdf[enclosed],x=x[enclosed]))
-    except RuntimeWarning:
         try:
-            MODE_THRESHOLD = 0.95
-            enclosed = pdf > MODE_THRESHOLD * mode
-            mid = (trapz(x[enclosed]*pdf[enclosed],x=x[enclosed])/trapz(pdf[enclosed],x=x[enclosed]))
+            wmode = (trapz(y[enclosed]*f[enclosed],x=y[enclosed])/trapz(f[enclosed],x=y[enclosed]))
         except RuntimeWarning:
-            mid = x[pdf == pdf.max()]
+            try:
+                MODE_THRESHOLD = 0.95
+                enclosed = f > MODE_THRESHOLD * mode
+                wmode = (trapz(y[enclosed]*f[enclosed],x=y[enclosed])/trapz(f[enclosed],x=y[enclosed]))
+            except RuntimeWarning:
+                wmode = y[pdf == f.max()][0]
+
+        return wmode
+    
+    if style == 'enclosed':
+        dist_prob = np.abs(np.subtract.outer(cumu,cumu))
+        dist_x = np.abs(np.subtract.outer(x,x))
+        
+        dist_prob[(dist_prob > (enclosed_prob + prob_res)) | (dist_prob < (enclosed_prob-prob_res))] = 0.0
+        while (len(dist_x[dist_prob != 0.0]) == 0):
+            prob_res *= 1.05
+            dist_prob[(dist_prob > (enclosed_prob + prob_res)) | (dist_prob < (enclosed_prob-prob_res))] = 0.0
+            if (prob_res > 0.5 * prob_res_max): return np.nan, np.nan,np.nan
             
+        xind = np.where((dist_x == dist_x[dist_prob != 0.0].min()) & (dist_prob != 0.0))
+        low, upp = x[xind[0][0]], x[xind[1][0]]
+       
+        mid = find_weighted_mode(pdf,x)
+        
+    elif style == 'percentile':
+              
+        mid = x[np.abs(cumu - 0.5) == np.abs(cumu - 0.5).min()][0]
+        upp = x[np.abs(cumu - upper_prob) == np.abs(cumu - upper_prob).min()][0]
+        low = x[np.abs(cumu - lower_prob) == np.abs(cumu - lower_prob).min()][0]
+
+    elif style == 'percentile_mixed':
+
+        mid = find_weighted_mode(pdf,x)
+        upp = x[np.abs(cumu - upper_prob) == np.abs(cumu - upper_prob).min()][0]
+        low = x[np.abs(cumu - lower_prob) == np.abs(cumu - lower_prob).min()][0]
+
+    elif style == 'height_from_max':
+
+        height = pdf.max() * np.exp(-sigma**2*0.5)/np.exp(0)
+        
+        mid = find_weighted_mode(pdf,x)
+        upp = x[x > mid][np.abs(pdf[x > mid] - height) == np.abs(pdf[x > mid] -  height).min()][0]
+        low = x[x < mid][np.abs(pdf[x < mid] - height) == np.abs(pdf[x < mid] -  height).min()][0]
+        
     return mid, upp, low
 
 
@@ -85,9 +128,9 @@ def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
        if (n >1):
            r_vals_upp = norm(Rval,Rerr[0]).rvs(N)
            r_vals_upp =  r_vals_upp[r_vals_upp >= Rval] 
-           r_vals_low = norm(Rval,Rerr[1]).rvs(N)
+           r_vals_low = norm(Rval,np.abs(Rerr[1])).rvs(N)
            while (len(r_vals_low[r_vals_low < 0]) > 0):
-               r_vals_low[r_vals_low < 0] =  norm(Rval,Rerr[1]).rvs(len(r_vals_low[r_vals_low < 0]))
+               r_vals_low[r_vals_low < 0] =  norm(Rval,np.abs(Rerr[1])).rvs(len(r_vals_low[r_vals_low < 0]))
            r_vals_low =  r_vals_low[r_vals_low < Rval]
            r_vals = np.random.choice(np.append(r_vals_upp,r_vals_low),N)
     except TypeError:
@@ -120,10 +163,13 @@ def compute_equatorial_velocity_single(P,dP,R,dR,from_sample=True):
         #veq_mid = bins[hist == hist.max()][0]
     else:
         vgrid = np.linspace(max(0,veq_vals.min()),min(400,veq_vals.max()),800)
-        vpdf = gaussian_kde(veq_vals,bw_method=0.4).evaluate(vgrid)
-        veq_mid, veq_upp, veq_low = measure_interval(vpdf,vgrid)
+        vpdf = gaussian_kde(veq_vals,bw_method='scott').evaluate(vgrid)
+        veq_mid, veq_upp, veq_low = measure_interval(vpdf,x=vgrid)
+        
         
     veq_upper_err, veq_lower_err = veq_upp - veq_mid, veq_mid - veq_low
+
+    veq_mid,  veq_upper_err, veq_lower_err = veq_vals.mean(),veq_vals.std(),veq_vals.std()
     
     return veq_mid,veq_upper_err, veq_lower_err
 
@@ -191,7 +237,7 @@ def compute_equatorial_velocity_dataframe(df,columns = None):
         dR0 = [float(row[columns[1]]),abs(float(row[columns[2]]))]
         P0 = float(row[columns[3]])
         dP0 = float(row[columns[4]])
-        Veq, dVeq_plus, dVeq_minus = compute_equatorial_velocity_single(P0,dP0,R0,dR0)
+        Veq, dVeq_plus, dVeq_minus = compute_equatorial_velocity_single(P0,dP0,R0,dR0,from_sample = False)
         df.set_value(index, 'Veq', Veq)
         df.set_value(index, 'dVeq_plus', dVeq_plus)
         df.set_value(index, 'dVeq_minus', dVeq_minus)
@@ -223,7 +269,7 @@ def compute_inclination_dataframe(df, columns = None, posterior_list = None, Npo
                 Vsini0 = row[columns[0]]
                 dVsini0 = row[columns[1]]
                 Veq0 = row[columns[2]]
-                dVeq0 = np.sqrt(row[columns[3]]+row[columns[4]])
+                dVeq0 = np.sqrt(0.5*(row[columns[3]]**2+row[columns[4]]**2))
                 I,dI_plus,dI_minus,I_ul95, post = compute_inclination_single(Vsini0,dVsini0,Veq0,dVeq0,Npoints=Npoints)
             
         df.set_value(index, 'I', I)
@@ -255,7 +301,7 @@ def posterior_cosi_analytic(cosi,vsini_val,vsini_err,veq_val,veq_err):
     A = 1.0/np.sqrt(2 * np.pi * (vsini_err**2 / (1 - cosi**2) + veq_err**2)) * np.exp(-(vsini_val - veq_val*np.sqrt(1 - cosi**2))**2/2/(vsini_err**2 + veq_err**2*(1 - cosi**2))) 
     v_bar = (vsini_val * veq_err**2 * np.sqrt(1.0 - cosi**2) + veq_val * vsini_err**2)/(veq_err**2 * (1 - cosi**2) + vsini_err**2)
     sigma_bar = 1.0 / np.sqrt((1 - cosi**2)/ vsini_err**2 + 1.0 / veq_err**2)
-    post = A * 0.5 * (1.0 + spec.erf(v_bar/np.sqrt(2)/sigma_bar))
+    post = A * 0.5 * (1.0 + erf(v_bar/np.sqrt(2)/sigma_bar))
 
     return post
 
@@ -277,6 +323,8 @@ def  compute_cosipdf_from_dataframe(df, columns = None, analytic_approx=True, Np
         if ('cosi_arr' not in df): df['cosi_arr'] = pd.Series(np.empty(df.shape[0])).astype(object)
         if ('cosi_pdf' not in df): df['cosi_pdf'] = pd.Series(np.empty(df.shape[0])).astype(object)
 
+    dist_list = []
+        
     jj = -1
     Nentries = df.shape[0]
     for index,row in df.iterrows():
@@ -285,42 +333,50 @@ def  compute_cosipdf_from_dataframe(df, columns = None, analytic_approx=True, Np
         
         vs = float(row[columns[0]])
         dvs = float(row[columns[1]])
-    
+
+        veq = float(row[columns[2]])
+        dveq = float(np.sqrt(0.5*(row[columns[3]]**2 + row[columns[4]]**2)))
+
         if (analytic_approx):
-            veq = float(row[columns[2]])
-            dveq = float(np.sqrt(0.5*(row[columns[3]]**2 + row[columns[4]]**2)))
             post = np.asarray([posterior_cosi_analytic(c,vs,dvs,veq,dveq) for c in cosi_arr])
         else:
             Prot = float(row[columns[5]])
             dProt = float(row[columns[6]])
             R = float(row[columns[7]])
             dR = [float(row[columns[8]]),float(row[columns[9]])]
-            veq_vals = sample_veq_vals(Prot,dProt,R,dR)
-            veq_dist = gaussian_kde(veq_vals,bw_method='scott').evaluate
-            def vsini_dist(x): return norm.pdf(x,vs,dvs)
-            Nvelpoints = 400
-            varr = np.linspace(0,vs+7*dvs,Nvelpoints)
-            vsiniarr, carr = np.meshgrid(varr,cosi_arr)
-            veqarr = (vsiniarr/ np.sqrt(1.0 - carr * carr))
-            veq_dist_grid = np.zeros([Npoints,Nvelpoints])
-            vsin_dist_grid = np.zeros([Npoints,Nvelpoints])
-            for kk in range(Npoints):
-                veq_dist_grid[kk,:] = veq_dist(veqarr[kk,:].flatten())
-                vsin_dist_grid[kk,:] = norm.pdf(vsiniarr[kk,:].flatten())
-            print veq_dist_grid.shape, vsin_dist_grid.shape
-            post = trapz(veq_dist_grid * vsin_dist_grid,x=vsiniarr, axis=1)
-            print post.shape
-            
-            #post = posterior_cosi_full(carr,vsini_dist(vsiniarr),veq_dist(veqarr),vsiniarr)
+            veq_vals = np.sort(sample_veq_vals(Prot,dProt,R,dR))
+            vcumu = np.arange(len(veq_vals)) * 1.0 / len(veq_vals)
+            vmax, vmin = min(veq_vals[vcumu > 0.995]), max(veq_vals[vcumu < 0.005])
+            Nvelpoints = 600
+            v_arr = np.linspace(0,2*vmax,Nvelpoints)
+            v_grid, cosi_grid = np.meshgrid(v_arr,cosi_arr)
+            vsini_dist = norm.pdf(v_grid,vs/ np.sqrt(1.0 - cosi_grid * cosi_grid),dvs/ np.sqrt(1.0 - cosi_grid * cosi_grid))
+            veq_dist = gaussian_kde(veq_vals,bw_method='scott').evaluate(v_arr)
+            integrand = vsini_dist * veq_dist[None,:]
+            post = trapz(integrand,x=v_grid, axis=1)
 
+        post[:]/=trapz(post,x=cosi_arr)
+        
+        #post_analytic = np.asarray([posterior_cosi_analytic(c,vs,dvs,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
+        #post_analytic[:]/=trapz(post_analytic,x=cosi_arr)
 
-        #post[:]/=trapz(post,x=cosi_arr)
+        #dist = hellinger_distance(post,post_analytic,cosi_arr)
+        #dist_list.append(dist)
+        #if (dist > 0.05):
+        #    print row
+        #    plt.plot(cosi_arr,post,color='b')
+        #    plt.plot(cosi_arr,post_analytic,color='r')
+        #    plt.show()
+        #    plt.plot(v_arr,norm.pdf(v_arr,veq_vals.mean(),veq_vals.std()),color='b')
+        #    plt.plot(v_arr,veq_dist,color='green')
+        #    plt.hist(veq_vals,bins=np.linspace(veq_vals.min(),veq_vals.max(),40),normed=True,color='blue')
+        #    print veq_vals.mean(),veq_vals.std()
+        #    plt.show()
         post_list.append(post)
 
         
         if (add_to_dataframe):
             df.set_value(index, 'cosi_arr', cosi_arr.flatten().tolist())
             df.set_value(index, 'cosi_pdf', post.flatten().tolist())
-        
-        
+
     return cosi_arr, post_list

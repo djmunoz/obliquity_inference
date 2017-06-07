@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.interpolate import interp1d
-import matplotlib.pyplot as plt
+from scipy.integrate import trapz
 import time, sys
 from inclination_distribution import sample_distribution
 
@@ -44,7 +44,9 @@ def update_progress(completed,total,tag = ''):
 
 
 def compute_hierachical_likelihood(parameter_vals, y_pdf_given_parameter,
-                                   y_vals, y_measurement_pdfs,y_measurement_priors = None, K = 1000,
+                                   y_vals, y_measurement_pdfs,y_measurement_priors = None,
+                                   k_samples = True,
+                                   K = 1000,
                                    full = False):
     """
     Parameter estimation:
@@ -80,7 +82,8 @@ def compute_hierachical_likelihood(parameter_vals, y_pdf_given_parameter,
     if (full):
         lnlike  = compute_hierachical_likelihood_contributions(parameter_vals, y_pdf_given_parameter,
                                                                y_vals, y_measurement_pdfs,
-                                                               y_measurement_priors = y_measurement_priors, K = K).sum(axis=1)
+                                                               y_measurement_priors = y_measurement_priors,
+                                                               k_samples = k_samples,K = K).sum(axis=1)
     else:
         lnlike = np.zeros(M)
         for i in range(N_measurements):
@@ -109,7 +112,8 @@ def compute_hierachical_likelihood(parameter_vals, y_pdf_given_parameter,
 
 
 def compute_hierachical_likelihood_contributions(parameter_vals, y_pdf_given_parameter,
-                                                 y_vals, y_measurement_pdfs,y_measurement_priors = None, K = 1000):
+                                                 y_vals, y_measurement_pdfs,y_measurement_priors = None,
+                                                 k_samples = True, K = 1000):
     """
     Parameter estimation:
     
@@ -145,19 +149,67 @@ def compute_hierachical_likelihood_contributions(parameter_vals, y_pdf_given_par
     
     for i in range(N):
         update_progress(i,N)
-        y_post = y_measurement_pdfs[i]
-        sampled_measurements = sample_distribution(y_post,y_vals,nsamples= K)
-        if (y_measurement_priors is not None):
-            pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
+
+        if (y_measurement_priors is not None): mprior = y_measurement_priors[i]
+        else: mprior = None
+
+        if (k_samples):
+            lnlike_cont[:,i] = compute_hierarchical_likelihood_single_ksamples(parameter_vals,y_pdf_given_parameter,\
+                                                                           y_vals, y_measurement_pdfs[i],\
+                                                                           mprior, K=K)
         else:
-            pi0_yk = np.ones(K)
+            lnlike_cont[:,i] = compute_hierarchical_likelihood_single_exact(parameter_vals,y_pdf_given_parameter,\
+                                                                        y_vals, y_measurement_pdfs[i],\
+                                                                        mprior)
+        
+        #y_post = y_measurement_pdfs[i]
+        #sampled_measurements = sample_distribution(y_post,y_vals,nsamples= K)
+        #if (y_measurement_priors is not None):
+        #    pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
+        #else:
+        #    pi0_yk = np.ones(K)
             
-        for k in range(M):
-            f_yk = y_pdf_given_parameter(np.sort(sampled_measurements),parameter_vals[k])
-            lnlike_cont[k,i] = np.log((f_yk[:]/pi0_yk[:]).mean())
+        #for k in range(M):
+        #    f_yk = y_pdf_given_parameter(np.sort(sampled_measurements),parameter_vals[k])
+        #    lnlike_cont[k,i] = np.log((f_yk[:]/pi0_yk[:]).mean())
 
 
 
     return lnlike_cont
 
 
+def compute_hierarchical_likelihood_single_ksamples(parameter_vals, y_pdf_given_parameter,
+                                                    y_vals, y_measurement_pdf,y_measurement_prior = None, K = 1000):
+
+
+    sampled_measurements = sample_distribution(y_measurement_pdf,y_vals,nsamples= K)
+    if (y_measurement_prior is not None):
+        pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
+    else:
+        pi0_yk = np.ones(K)
+
+    M = parameter_vals.shape[0]
+    delta_loglike = np.zeros(M)
+    for k in range(M):
+        f_yk = y_pdf_given_parameter(np.sort(sampled_measurements),parameter_vals[k])
+        delta_loglike[k] = np.log((f_yk[:]/pi0_yk[:]).mean())
+    
+    return delta_loglike
+
+
+def compute_hierarchical_likelihood_single_exact(parameter_vals, y_pdf_given_parameter,
+                                                 y_vals, y_measurement_pdf,y_measurement_prior = None):
+
+    if (y_measurement_prior is not None):
+        pi0_yk = y_measurement_prior
+    else:
+        pi0_yk = np.ones(len(y_vals))
+    
+    M = parameter_vals.shape[0]
+    delta_loglike = np.zeros(M)
+    for k in range(M):
+        integrand = y_pdf_given_parameter(y_vals,parameter_vals[k]).flatten() * y_measurement_pdf / pi0_yk[:]
+        delta_loglike[k] = np.log(trapz(integrand, x = y_vals))
+    
+    
+    return delta_loglike
