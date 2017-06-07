@@ -17,6 +17,7 @@ __all__ = ['cosi_pdf','cosi_pdf_interp',
            'total_variation_distance'
            ]
 
+import os
 data_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 from cosi_pdf import cosi_pdf, cosi_pdf_interp
