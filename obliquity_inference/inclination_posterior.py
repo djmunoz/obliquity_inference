@@ -334,10 +334,13 @@ def  compute_cosipdf_from_dataframe(df, columns = None, analytic_approx=True, Np
         vs = float(row[columns[0]])
         dvs = float(row[columns[1]])
 
-        veq = float(row[columns[2]])
-        dveq = float(np.sqrt(0.5*(row[columns[3]]**2 + row[columns[4]]**2)))
-
         if (analytic_approx):
+            # check if we have equatorial velocity data
+            if (columns[2] not in df) & (columns[3] not in df):
+                compute_equatorial_velocity_dataframe(df,columns = [columns[7],columns[8],columns[9],columns[5],columns[6]])
+            else:
+                veq = float(row[columns[2]])
+                dveq = float(np.sqrt(0.5*(row[columns[3]]**2 + row[columns[4]]**2)))
             post = np.asarray([posterior_cosi_analytic(c,vs,dvs,veq,dveq) for c in cosi_arr])
         else:
             Prot = float(row[columns[5]])
