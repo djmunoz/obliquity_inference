@@ -26,7 +26,7 @@ def sample_measurement(value,unc,nsamples=20000):
         sampled_values = sample_distribution(twosided_gaussian(value,unc[0],unc[1],xgrid=value_grid),
                                              value_grid,nsamples=nsamples)
     elif (len(unc) == 1):
-        sampled_values = norm.(value,unc).rvs(nsamples)
+        sampled_values = norm(value,unc).rvs(nsamples)
 
 
     return sampled_values
