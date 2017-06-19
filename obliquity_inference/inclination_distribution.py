@@ -21,11 +21,16 @@ def twosided_gaussian(xmid,xupp,xlow,xgrid = None):
 
 def sample_measurement(value,unc,nsamples=20000):
 
-    if (len(unc) == 2):
+    try:
+        if (len(unc) == 2): twosided = True
+    except TypeError:
+        twosided = False
+        
+    if twosided:
         value_grid = np.linspace(value - 4 * unc[1], value + 4 * unc[0],600)
         sampled_values = sample_distribution(twosided_gaussian(value,unc[0],unc[1],xgrid=value_grid),
                                              value_grid,nsamples=nsamples)
-    elif (len(unc) == 1):
+    else:
         sampled_values = norm(value,unc).rvs(nsamples)
 
 
