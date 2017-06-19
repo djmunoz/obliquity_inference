@@ -1,7 +1,8 @@
 from numpy import sinh, exp, cos, sin, pi
 import numpy as np
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumtrapz,trapz
 from scipy.stats import norm
+
 
 """
 Properties of inclination distributions of spin-orbit misalignment according
