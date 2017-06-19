@@ -1,13 +1,36 @@
 from numpy import sinh, exp, cos, sin, pi
 import numpy as np
 from scipy.integrate import cumtrapz
-
+from scipy.stats import norm
 
 """
 Properties of inclination distributions of spin-orbit misalignment according
 to the Fisher concentration distribution.
 
 """
+
+def twosided_gaussian(xmid,xupp,xlow,xgrid = None):
+    if (xgrid is None):
+        xgrid = np.linspace(xmid - 4 * xlow, xmid + 4 * xupp,600)
+        
+    x_dist = np.append(norm.pdf(xgrid[xgrid < xmid],xmid,xlow) * np.sqrt(2 * np.pi) * xlow,
+                       norm.pdf(xgrid[xgrid >= xmid],xmid,xupp) * np.sqrt(2 * np.pi) * xupp)
+    x_dist/= trapz(x_dist,x=xgrid)
+
+    return x_dist
+
+def sample_measurement(value,unc,nsamples=20000):
+
+    if (len(unc) == 2):
+        value_grid = np.linspace(value - 4 * unc[1], value + 4 * unc[0],600)
+        sampled_values = sample_distribution(twosided_gaussian(value,unc[0],unc[1],xgrid=value_grid),
+                                             value_grid,nsamples=nsamples)
+    elif (len(unc) == 1):
+        sampled_values = norm.(value,unc).rvs(nsamples)
+
+
+    return sampled_values
+        
 
 def sample_distribution(dist_grid,val_grid,nsamples=1):
     """ 
