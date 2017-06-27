@@ -126,7 +126,10 @@ def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
     try:
        n = len(Rerr)
        if (n >1):
-           r_vals_upp = norm(Rval,Rerr[0]).rvs(N)
+           try:
+               r_vals_upp = norm(Rval,Rerr[0]).rvs(N)
+           except ValueError:
+               print Rval,Rerr[0]
            r_vals_upp =  r_vals_upp[r_vals_upp >= Rval] 
            r_vals_low = norm(Rval,np.abs(Rerr[1])).rvs(N)
            while (len(r_vals_low[r_vals_low < 0]) > 0):
@@ -146,7 +149,7 @@ def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
 
     return v_vals
 
-def compute_equatorial_velocity_single(P,dP,R,dR,from_sample=True):
+def compute_equatorial_velocity_single(P,dP,R,dR,percentiles = False, symmetric = False):
 
     """
     Given measurements (and uncertainties) of stellar rotation period 
@@ -156,7 +159,12 @@ def compute_equatorial_velocity_single(P,dP,R,dR,from_sample=True):
     """
 
     veq_vals = sample_veq_vals(P,dP,R,dR)
-    if (from_sample):
+
+    if (symmetric):
+        veq_mid,  veq_upper_err, veq_lower_err = veq_vals.mean(),veq_vals.std(),veq_vals.std()
+        return veq_mid,veq_upper_err, veq_lower_err
+        
+    if (percentiles):
         veq_mid, veq_upp, veq_low = np.percentile(veq_vals, [50, 84, 16],axis= 0).tolist()
         #bins = np.arange(min(veq_vals),max(veq_vals),(veq_upp - veq_low) / 10)
         #hist, bin_edges = np.histogram(veq_vals,bins=bins)
@@ -169,7 +177,7 @@ def compute_equatorial_velocity_single(P,dP,R,dR,from_sample=True):
         
     veq_upper_err, veq_lower_err = veq_upp - veq_mid, veq_mid - veq_low
 
-    veq_mid,  veq_upper_err, veq_lower_err = veq_vals.mean(),veq_vals.std(),veq_vals.std()
+
     
     return veq_mid,veq_upper_err, veq_lower_err
 
@@ -217,7 +225,7 @@ def compute_inclination_single(Vsini,dVsini,Veq,dVeq,analytic_approx = True,Npoi
 
 
 
-def compute_equatorial_velocity_dataframe(df,columns = None):
+def compute_equatorial_velocity_dataframe(df,columns = None,percentiles=False):
 
     """
     Compute equatorial velocities -- and uncertainties --  for a collection of targets
@@ -231,13 +239,17 @@ def compute_equatorial_velocity_dataframe(df,columns = None):
     df['Veq'] = pd.Series(np.zeros(df.shape[0]))
     df['dVeq_plus'] = pd.Series(np.zeros(df.shape[0]))
     df['dVeq_minus'] = pd.Series(np.zeros(df.shape[0]))
-    
+
+    jj = -1
+    Nentries = df.shape[0]
     for index,row in df.iterrows():
+        jj+=1
+        update_progress(jj,Nentries,tag=' (eq. vel.)')
         R0 = float(row[columns[0]])
         dR0 = [float(row[columns[1]]),abs(float(row[columns[2]]))]
         P0 = float(row[columns[3]])
         dP0 = float(row[columns[4]])
-        Veq, dVeq_plus, dVeq_minus = compute_equatorial_velocity_single(P0,dP0,R0,dR0,from_sample = False)
+        Veq, dVeq_plus, dVeq_minus = compute_equatorial_velocity_single(P0,dP0,R0,dR0,percentiles = percentiles)
         df.set_value(index, 'Veq', Veq)
         df.set_value(index, 'dVeq_plus', dVeq_plus)
         df.set_value(index, 'dVeq_minus', dVeq_minus)

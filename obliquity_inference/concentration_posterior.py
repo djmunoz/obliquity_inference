@@ -1,7 +1,8 @@
-from cosi_pdf import cosi_pdf 
+from cosi_pdf import cosi_pdf
+from lambda_pdf import lambda_pdf 
 import numpy as np
 from numpy import cosh, sqrt, sinh, pi
-from scipy.integrate import quad, cumtrapz
+from scipy.integrate import quad, cumtrapz, trapz
 from scipy.interpolate import interp2d, RectBivariateSpline
 from hierarchical_inference import compute_hierachical_likelihood
 

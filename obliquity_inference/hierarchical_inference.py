@@ -79,33 +79,10 @@ def compute_hierachical_likelihood(parameter_vals, y_pdf_given_parameter,
     M = parameter_vals.shape[0]
     N_measurements = len(y_measurement_pdfs)
 
-    if (full):
-        lnlike  = compute_hierachical_likelihood_contributions(parameter_vals, y_pdf_given_parameter,
-                                                               y_vals, y_measurement_pdfs,
-                                                               y_measurement_priors = y_measurement_priors,
-                                                               k_samples = k_samples,K = K).sum(axis=1)
-    else:
-        lnlike = np.zeros(M)
-        for i in range(N_measurements):
-            update_progress(i,N_measurements)
-            y_post = y_measurement_pdfs[i]
-            sampled_measurements = sample_distribution(y_post,y_vals,nsamples= K)
-            if (y_measurement_priors is not None):
-                pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
-            else:
-                pi0_yk = np.ones(K)
-
-            for k in range(M):
-                f_yk = y_pdf_given_parameter(np.sort(sampled_measurements),parameter_vals[k])
-                lnlike[k] = lnlike[k] + np.log((f_yk[:]/pi0_yk[:]).mean())
-            
-            #y, p = np.meshgrid(np.sort(sampled_measurements),parameter_vals)
-            #y, p = y.flatten(), p.flatten()
-            #f_yk = y_pdf_given_parameter(y,p).reshape(M,K)
-            ##f_yk = np.vectorize(y_pdf_given_parameter)(y,p).reshape(M,K)
-            #lnlike[:] += np.log((f_yk/pi0_yk[None,:]).mean(axis=1)).flatten()
-        
-
+    lnlike  = compute_hierachical_likelihood_contributions(parameter_vals, y_pdf_given_parameter,
+                                                           y_vals, y_measurement_pdfs,
+                                                           y_measurement_priors = y_measurement_priors,
+                                                           k_samples = k_samples,K = K).sum(axis=1)
     concentration_likelihood = np.exp(lnlike) 
 
     return concentration_likelihood
@@ -155,24 +132,12 @@ def compute_hierachical_likelihood_contributions(parameter_vals, y_pdf_given_par
 
         if (k_samples):
             lnlike_cont[:,i] = compute_hierarchical_likelihood_single_ksamples(parameter_vals,y_pdf_given_parameter,\
-                                                                           y_vals, y_measurement_pdfs[i],\
-                                                                           mprior, K=K)
+                                                                               y_vals, y_measurement_pdfs[i],\
+                                                                               mprior, K=K)
         else:
             lnlike_cont[:,i] = compute_hierarchical_likelihood_single_exact(parameter_vals,y_pdf_given_parameter,\
-                                                                        y_vals, y_measurement_pdfs[i],\
-                                                                        mprior)
-        
-        #y_post = y_measurement_pdfs[i]
-        #sampled_measurements = sample_distribution(y_post,y_vals,nsamples= K)
-        #if (y_measurement_priors is not None):
-        #    pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
-        #else:
-        #    pi0_yk = np.ones(K)
-            
-        #for k in range(M):
-        #    f_yk = y_pdf_given_parameter(np.sort(sampled_measurements),parameter_vals[k])
-        #    lnlike_cont[k,i] = np.log((f_yk[:]/pi0_yk[:]).mean())
-
+                                                                            y_vals, y_measurement_pdfs[i],\
+                                                                            mprior)
 
 
     return lnlike_cont
@@ -186,7 +151,7 @@ def compute_hierarchical_likelihood_single_ksamples(parameter_vals, y_pdf_given_
     if (y_measurement_prior is not None):
         pi0_yk = interp1d(y_vals,y_measurement_priors[i])(np.sort(sampled_measurements))
     else:
-        pi0_yk = np.ones(K)
+        pi0_yk = np.ones(K) / (max(y_vals) - min(y_vals))
 
     M = parameter_vals.shape[0]
     delta_loglike = np.zeros(M)
@@ -203,13 +168,12 @@ def compute_hierarchical_likelihood_single_exact(parameter_vals, y_pdf_given_par
     if (y_measurement_prior is not None):
         pi0_yk = y_measurement_prior
     else:
-        pi0_yk = np.ones(len(y_vals))
+        pi0_yk = np.ones(len(y_vals)) / (max(y_vals) - min(y_vals))
     
     M = parameter_vals.shape[0]
     delta_loglike = np.zeros(M)
     for k in range(M):
-        integrand = y_pdf_given_parameter(y_vals,parameter_vals[k]).flatten() * y_measurement_pdf / pi0_yk[:]
+        integrand = y_pdf_given_parameter(y_vals,parameter_vals[k]).flatten() * 0.5 * y_measurement_pdf / pi0_yk[:]
         delta_loglike[k] = np.log(trapz(integrand, x = y_vals))
-    
     
     return delta_loglike

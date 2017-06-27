@@ -2,7 +2,7 @@ from numpy import sinh, exp, cos, sin, pi
 import numpy as np
 from scipy.integrate import cumtrapz,trapz
 from scipy.stats import norm
-
+import matplotlib.pyplot as plt
 
 """
 Properties of inclination distributions of spin-orbit misalignment according
@@ -16,11 +16,11 @@ def twosided_gaussian(xmid,xupp,xlow,xgrid = None):
         
     x_dist = np.append(norm.pdf(xgrid[xgrid < xmid],xmid,xlow) * np.sqrt(2 * np.pi) * xlow,
                        norm.pdf(xgrid[xgrid >= xmid],xmid,xupp) * np.sqrt(2 * np.pi) * xupp)
-    x_dist/= trapz(x_dist,x=xgrid)
+    x_dist /= 0.5 * (np.sqrt(2 * np.pi) * xlow + np.sqrt(2 * np.pi) * xupp)
 
     return x_dist
 
-def sample_measurement(value,unc,nsamples=20000):
+def sample_measurement(value,unc,nsamples=20000,positive=False):
 
     try:
         if (len(unc) == 2): twosided = True
@@ -28,12 +28,18 @@ def sample_measurement(value,unc,nsamples=20000):
         twosided = False
         
     if twosided:
-        value_grid = np.linspace(value - 4 * unc[1], value + 4 * unc[0],600)
+        value_grid = np.linspace(value - 4 * max(unc), value + 4 * max(unc),800)
         sampled_values = sample_distribution(twosided_gaussian(value,unc[0],unc[1],xgrid=value_grid),
                                              value_grid,nsamples=nsamples)
+        if positive:
+            while (len(sampled_values[sampled_values < 0]) > 0):
+                sampled_values[sampled_values < 0] = sample_distribution(twosided_gaussian(value,unc[0],unc[1],xgrid=value_grid),
+                                                                         value_grid,nsamples=len(sampled_values[sampled_values < 0]))
     else:
         sampled_values = norm(value,unc).rvs(nsamples)
-
+        if positive:
+            while (len(sampled_values[sampled_values < 0]) > 0):
+                sampled_values[sampled_values < 0] = norm(value,unc).rvs(len(sampled_values[sampled_values < 0]))  
 
     return sampled_values
         
@@ -42,7 +48,6 @@ def sample_distribution(dist_grid,val_grid,nsamples=1):
     """ 
     Nsamples from a tabulated posterior 
     """
-
     cdf = cumtrapz(dist_grid,x=val_grid)
     cdf /= max(cdf)
     u = np.random.random(size=nsamples)

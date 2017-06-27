@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from math import sqrt, cosh, sinh, tan, cos, pi
+from math import sqrt, cosh, sinh, tan, cos, pi, exp
 from scipy.interpolate import RectBivariateSpline
 from scipy.integrate import quad
 import warnings
@@ -11,13 +11,13 @@ def lambda_integrand(y, k, l):
     """
 
     """
-    return cosh(k*y) / sqrt(1-y*y) * y / sqrt(1-(y * y/(1 - y * y)) * tan(l)**2)
+    return exp(k*y) / sqrt(1 - y * y) * y / sqrt(1 - tan(l)**2  * y**2 / (1- y**2))
 
 def lambda_pdf(l,kappa=1):
     """
 
     """
-    return 2*kappa/(pi * sinh(kappa)) / cos(l)**2 * quad(lambda_integrand,0,cos(l),args=(kappa,l,))[0] 
+    return kappa/(pi * sinh(kappa)) / cos(l)**2 * quad(lambda_integrand,0,cos(l),args=(kappa,l,))[0] 
 
 
 
