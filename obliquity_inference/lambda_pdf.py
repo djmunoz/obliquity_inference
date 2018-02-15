@@ -35,7 +35,8 @@ def recompute_lambda_pdf(lambda_array=None,kappa_array=None,save=False):
     else:
         y = lambda_array
     if (kappa_array is None):
-        p = np.append(np.logspace(-2.5,1.7,250),np.linspace(51,221,170))
+        #p = np.append(np.logspace(-2.5,1.9,400),np.linspace(80,600,600))
+        p = np.append(np.linspace(0.001,79.5,400),np.linspace(80,600,600))
     else:
         p = kappa_array
         

@@ -44,7 +44,7 @@ def sample_measurement(value,unc,nsamples=20000,positive=False):
     return sampled_values
         
 
-def sample_distribution(dist_grid,val_grid,nsamples=1):
+def sample_distribution(dist_grid,val_grid,nsamples=1,max_value=None):
     """ 
     Nsamples from a tabulated posterior 
     """
@@ -54,7 +54,9 @@ def sample_distribution(dist_grid,val_grid,nsamples=1):
     inds = np.digitize(u,cdf)
     vals= np.asarray(val_grid)[inds]
 
-    
+    if (max_value is not None):
+        vals[vals > max_value] = max_value
+        
     return vals
 
 

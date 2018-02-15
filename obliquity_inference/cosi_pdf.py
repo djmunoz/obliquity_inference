@@ -19,11 +19,12 @@ def recompute_cosi_pdf(cosi_array=None,kappa_array=None,save=False):
     """
     
     if (cosi_array is None):
-        y = np.linspace(0.000001,0.9999999,200)
+        y = np.linspace(0.00000001,0.999999999,300)
     else:
         y = cosi_array
     if (kappa_array is None):
-        p = np.append(np.logspace(-2.5,1.7,250),np.linspace(51,221,170))
+        #p = np.append(np.logspace(-2.5,1.9,400),np.linspace(80,600,600))
+        p = np.append(np.linspace(0.001,89.5,400),np.linspace(90,700,600))
     else:
         p = kappa_array
         
