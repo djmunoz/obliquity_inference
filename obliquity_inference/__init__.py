@@ -8,6 +8,7 @@ __all__ = ['cosi_pdf','cosi_pdf_interp','recompute_cosi_pdf'
            'measure_interval',
            'measure_interval_from_sample',
            'compute_cosipdf_from_dataframe',
+           'read_cosipdf_from_csv',
            'posterior_cosi_full',
            'posterior_cosi_analytic',
            'sample_veq_vals',
@@ -36,6 +37,7 @@ from hierarchical_inference import compute_hierarchical_likelihood_contributions
 from inclination_posterior import measure_interval,\
     measure_interval_from_sample,\
     compute_cosipdf_from_dataframe,\
+    read_cosipdf_from_csv,\
     compute_inclination_value_from_cosi_posterior,\
     compute_inclination_dataframe,\
     posterior_cosi_full, posterior_cosi_analytic, sample_veq_vals,\

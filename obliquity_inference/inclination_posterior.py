@@ -119,7 +119,7 @@ def measure_interval(xpdf,x=None,sigma=1.0,style='enclosed'):
     return mid, upp, low
 
 
-def sample_veq_vals(Pval,Perr,Rval,Rerr,N=20000):
+def sample_veq_vals(Pval,Perr,Rval,Rerr,N=30000):
     """
     From (double sided) Gaussian distributions in rotational period and stellar radius,
     compute a PDF of the stellar equatorial velocity
@@ -418,8 +418,6 @@ def  compute_cosipdf_from_dataframe(df, vsini_columns = None, veq_columns = None
     #cosi_arr = 1.0-np.logspace(0,-5,Npoints)
     cosi_arr = np.linspace(0.0000,0.9999,Npoints)
     
-    post_list = []
-
     if (veq_columns[0] not in df) & (veq_columns[1] not in df) & (veq_columns[2] not in df):
         recompute_velocity = True
         df[veq_columns[0]] = pd.Series(np.empty(df.shape[0])).astype(object)
@@ -438,11 +436,10 @@ def  compute_cosipdf_from_dataframe(df, vsini_columns = None, veq_columns = None
         compute_equatorial_velocity_dataframe(df, radius_columns = radius_columns,
                                               period_columns = period_columns)
 
-    dist_list = []
-
-    
     jj = -1
     Nentries = df.shape[0]
+    post_list = np.zeros([Nentries,Npoints])
+
     for index,row in df.iterrows():
         jj+=1
         update_progress(jj,Nentries,tag=' (cosI post.)')
@@ -475,8 +472,8 @@ def  compute_cosipdf_from_dataframe(df, vsini_columns = None, veq_columns = None
                 df.set_value(index, veq_columns[3], veq_ul95)
 
         area = trapz(post,x=cosi_arr)
-        #if (area != 0.0):
-        #    post[:]/=area
+        if (area != 0.0):
+            post[:]/=area
         
         #post_analytic = np.asarray([posterior_cosi_analytic(c,vs,dvs,veq_vals.mean(),veq_vals.std()) for c in cosi_arr])
         #post_analytic[:]/=trapz(post_analytic,x=cosi_arr)
@@ -493,11 +490,25 @@ def  compute_cosipdf_from_dataframe(df, vsini_columns = None, veq_columns = None
         #    plt.hist(veq_vals,bins=np.linspace(veq_vals.min(),veq_vals.max(),40),normed=True,color='blue')
         #    print veq_vals.mean(),veq_vals.std()
         #    plt.show()
-        post_list.append(post)
+        post_list[jj,:] = post
 
         
         if (add_to_dataframe):
             df.set_value(index, 'cosi_arr', cosi_arr.flatten().tolist())
             df.set_value(index, 'cosi_pdf', (post.flatten()).tolist())
 
+    return cosi_arr, post_list
+
+def read_cosipdf_from_csv(filename,cosival_label='cosi_arr',
+                          cosipdf_label = 'cosi_pdf'):
+    # Read CSV file
+    df = pd.read_csv(filename)
+    # Extract cosI values
+    cosi_arr = np.asarray(df[cosival_label].iloc[0][1:-1].split(',')).astype(float)
+    post_list = np.zeros([df.shape[0],len(cosi_arr)])
+    # Read posterior PDFs for each entry in CSV file
+    for ii, pdf in enumerate(df[cosipdf_label].values):
+        post_list[ii,:] = np.asarray(pdf[1:-1].split(',')).astype(float).flatten()
+    post_list = np.asarray(post_list).flatten().reshape(len(post_list),len(cosi_arr))
+    
     return cosi_arr, post_list

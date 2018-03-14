@@ -99,7 +99,7 @@ def compute_kappa_posterior_from_lambda(kappa_vals,lambda_post_list,lambda_vals,
 
 
 
-def concentration_two_sample_splitting(cosivals,cosipdf_list,kappa_vals,deltaloglike_contr,ind):
+def concentration_two_sample_splitting(cosivals,cosipdf_list,kappa_vals,deltaloglike_contr,ind,draws=5000):
     '''
     Function to separate a sample of cosI PDFs into TWO subsets as given by an array of boolean
     indices (True -> subset set #1, False--> subset #2), compute the posterior of the concentration
@@ -118,21 +118,18 @@ def concentration_two_sample_splitting(cosivals,cosipdf_list,kappa_vals,deltalog
  
     '''
 
-    
-    cosipdf_list1 = np.asarray(cosipdf_list)[ind].tolist()
-    cosipdf_list2 = np.asarray(cosipdf_list)[np.invert(ind)].tolist()
-    size1 = len(cosipdf_list1)
-    size2 = len(cosipdf_list2)
+    cosipdf_list1 = np.asarray(cosipdf_list)[ind,:]
+    cosipdf_list2 = np.asarray(cosipdf_list)[np.invert(ind),:]
+    size1 = (cosipdf_list1).shape[0]
+    size2 = (cosipdf_list2).shape[0]
     
     kappa_post_a = np.exp(deltaloglike_contr[:,ind].sum(axis = 1)) * kappa_prior_function(kappa_vals)
     kappa_post_b = np.exp(deltaloglike_contr[:,np.invert(ind)].sum(axis = 1)) * kappa_prior_function(kappa_vals)
     kappa_post_a /= trapz(kappa_post_a,x=kappa_vals)
     kappa_post_b /= trapz(kappa_post_b,x=kappa_vals)
 
-    
     # Do random sampling-and-splitting of the total population
     indices = np.random.permutation(np.append(np.ones(size1),np.zeros(size2)).astype(bool))
-    draws = 5000
     hellinger_list = np.zeros(draws)
     for jj in range(draws):
         indices = np.random.permutation(indices)
