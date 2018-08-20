@@ -388,10 +388,27 @@ def posterior_cosi_full(cosi,Vsini,dVsini,Prot,dProt,R,dR, simple = True):
 
 def posterior_cosi_analytic(cosi,vsini_val,vsini_err,veq_val,veq_err):
 
-    A = 1.0/np.sqrt(2 * np.pi * (vsini_err**2 / (1 - cosi**2) + veq_err**2)) * np.exp(-(vsini_val - veq_val*np.sqrt(1 - cosi**2))**2/2/(vsini_err**2 + veq_err**2*(1 - cosi**2))) 
-    v_bar = (vsini_val * veq_err**2 * np.sqrt(1.0 - cosi**2) + veq_val * vsini_err**2)/(veq_err**2 * (1 - cosi**2) + vsini_err**2)
-    sigma_bar = 1.0 / np.sqrt((1 - cosi**2)/ vsini_err**2 + 1.0 / veq_err**2)
-    post = A * 0.5 * (1.0 + erf(v_bar/np.sqrt(2)/sigma_bar))
+    V = np.sqrt(1 - cosi * cosi)
+    beta = vsini_val / veq_val
+    alpha = vsini_err / veq_err
+    gamma = veq_val / veq_err
+
+    A = np.exp(-0.5 * gamma**2 * (1 + beta**2 / alpha**2 )) / (V**2 + alpha**2)
+    B = 0.5 / np.pi * alpha
+    cc = (alpha**2 + V * beta)**2 / (V**2 + alpha**2) / 2
+    C = np.exp(gamma**2 / alpha**2 * cc)
+    D = 0.5 / np.sqrt(np.pi)  * np.sqrt(cc) * gamma * \
+        (1 + erf(np.sqrt(cc) * gamma / alpha))
+
+    #A = np.exp(-0.5 * gamma**2 * (1 + beta**2 / alpha**2 )) * V**2 / (1 + V**2 * alpha**2)
+    #B = 0.5 / np.pi * alpha
+    #cc = (V*alpha**2 + beta)**2 / (1 + V**2 *alpha**2) / 2
+    #C = np.exp(gamma**2 / alpha**2 * cc)
+    #D = 0.5 / np.sqrt(np.pi)  * np.sqrt(cc) * gamma * \
+    #    (1 + erf(np.sqrt(cc) * gamma / alpha))
+    
+    
+    post = A * (B + C * D)
 
     return post
 

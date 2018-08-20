@@ -82,7 +82,7 @@ def compute_hierarchical_likelihood(parameter_vals, y_pdf_given_parameter,
                                                             y_vals, y_measurement_pdfs,
                                                             y_measurement_priors = y_measurement_priors,
                                                             k_samples = k_samples, K = K, maxyvalue = maxyvalue).sum(axis=1)
-    lnlike -= (lnlike).max()
+    #lnlike -= (lnlike).max()
     concentration_likelihood = np.exp(lnlike) 
 
     return concentration_likelihood
@@ -143,7 +143,7 @@ def compute_hierarchical_likelihood_contributions(parameter_vals, y_pdf_given_pa
             lnlike_cont[:,i] = compute_hierarchical_likelihood_single_exact(parameter_vals,y_pdf_given_parameter,\
                                                                             y_vals, y_measurement_pdfs[i],\
                                                                             mprior)
-        lnlike_cont[:,i] -= (lnlike_cont[:,i]).max()
+        #lnlike_cont[:,i] -= (lnlike_cont[:,i]).max()
 
     return lnlike_cont
 
